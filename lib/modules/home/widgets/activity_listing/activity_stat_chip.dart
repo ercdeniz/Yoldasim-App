@@ -1,0 +1,35 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+/// Aktivite istatistik çipi.
+/// [value] : Çip üzerinde gösterilecek değer.
+/// [color] : Çip üzerindeki yazının rengi.
+/// Bu widget, aktivite kartlarının üzerinde istatistikler göstermek için kullanılır.
+/// Örneğin, 2/5 gibi.
+class ActivityStatChip extends StatelessWidget {
+  final String value;
+  final Color color;
+
+  const ActivityStatChip({super.key, required this.value, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: context.theme.colorScheme.secondaryContainer.withValues(
+          alpha: 0.1,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        value,
+        style: TextStyle(
+          fontSize: context.theme.textTheme.labelSmall?.fontSize,
+          fontWeight: context.theme.textTheme.labelSmall?.fontWeight,
+          color: color,
+        ),
+      ),
+    );
+  }
+}

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
 import 'package:yoldasim_app/widgets/carts/field_requirement_badge.dart';
 
-class IconListItem extends StatelessWidget {
+class AddPageListItem extends StatelessWidget {
   final String title;
   final Widget subtitle;
   final FieldRequirement requirement;
@@ -11,7 +11,7 @@ class IconListItem extends StatelessWidget {
   final Color iconBGColor;
   final VoidCallback onTap;
 
-  const IconListItem({
+  const AddPageListItem({
     super.key,
     required this.title,
     required this.subtitle,

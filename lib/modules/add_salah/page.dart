@@ -67,7 +67,7 @@ class AddSalahPage extends GetView<AddSalahController> {
                   clipBehavior: Clip.antiAlias,
                   child: Column(
                     children: [
-                      IconListItem(
+                      AddPageListItem(
                         title: C.activity.salahTime,
                         subtitle: Obx(
                           () => Text(controller.selectedTimeText.value),
@@ -80,7 +80,7 @@ class AddSalahPage extends GetView<AddSalahController> {
                         },
                       ),
                       // Başlangıç Tarihi Seçimi
-                      IconListItem(
+                      AddPageListItem(
                         title: C.activity.pickStartDate,
                         subtitle: Obx(
                           () => Text(
