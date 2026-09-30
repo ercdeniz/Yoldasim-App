@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:yoldasim_app/modules/add_fasting/binding.dart';
+import 'package:yoldasim_app/modules/add_fasting/page.dart';
 import 'package:yoldasim_app/modules/add_salah/binding.dart';
 import 'package:yoldasim_app/modules/add_salah/page.dart';
 import 'package:yoldasim_app/modules/splash/binding.dart';
@@ -32,13 +34,13 @@ class AppPages {
       page: () => const AddSalahPage(),
       binding: AddSalahBinding(),
     ),
-    /*
+
     GetPage(
       name: AppRoutes.FASTING,
       page: () => const AddFastingPage(),
       binding: AddFastingBinding(),
     ),
-    */
+
     /*
     GetPage(
       name: AppRoutes.DHIKR,

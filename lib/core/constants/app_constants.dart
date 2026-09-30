@@ -35,6 +35,8 @@ class _CommonStrings {
   final String mandatory = 'Zorunlu';
   final String optional = 'İsteğe Bağlı';
   final String today = 'Bugün';
+  final String yes = 'Evet';
+  final String no = 'Hayır';
 }
 
 class _HomeStrings {
@@ -57,6 +59,9 @@ class _ActivityStrings {
   final String dailyTarget = 'Günlük Kılınacak Hedef';
   final String fastingTitle = 'Oruç Kazası';
   final String fastingDesc = 'Ramazan, adak veya kefaret orucu ekle';
+  final String fastingTotalDebt = 'Toplam Oruç Borcu (Gün)';
+  final String fastingQuestion = 'Bugün oruç tuttunuz mu?';
+
   final String quranTitle = 'Kur\'an-ı Kerim';
   final String quranDesc = 'Sayfa veya cüz hedefleri';
   final String dhikrTitle = 'Zikir / Tesbihat';
@@ -68,6 +73,7 @@ class _ActivityStrings {
   final String errSelectTime = '• Lütfen bir namaz vakti seçin.';
   final String errTotalDebtEmpty = '• Toplam kaza borcunu girin.';
   final String errDailyTargetEmpty = '• Günlük hedef miktarını girin.';
+  final String errFastingTotalDebtEmpty = '• Toplam oruç borcunu girin.';
 
   String successCreated(String activityName) =>
       '$activityName kazası başarıyla oluşturuldu.';

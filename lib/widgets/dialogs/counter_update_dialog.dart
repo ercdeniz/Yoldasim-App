@@ -4,31 +4,28 @@ import 'package:yoldasim_app/core/constants/app_constants.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
 import 'package:yoldasim_app/core/extensions/snackbar_extentions.dart';
 import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
-import 'package:yoldasim_app/data/models/activity_model.dart';
-import 'package:yoldasim_app/modules/home/controllers/listing_controller.dart';
+
+typedef CounterUpdateCallback = Future<String?> Function(int value);
 
 typedef C = AppConstants;
 
-class ActivityUpdateDialog extends StatelessWidget {
-  final ActivityModel activity;
-  final int currentDailyDone;
-  final int dailyTarget;
+class CounterUpdateDialog extends StatelessWidget {
+  final int currentValue;
+  final int target;
   final TargetCondition condition;
+  final CounterUpdateCallback onSave;
 
-  const ActivityUpdateDialog({
+  const CounterUpdateDialog({
     super.key,
-    required this.activity,
-    required this.currentDailyDone,
-    required this.dailyTarget,
+    required this.currentValue,
+    required this.target,
     required this.condition,
+    required this.onSave,
   });
-
-  ListingController get listingController => Get.find<ListingController>();
 
   @override
   Widget build(BuildContext context) {
-    final counter = currentDailyDone.obs;
-
+    final counter = currentValue.obs;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -49,7 +46,7 @@ class ActivityUpdateDialog extends StatelessWidget {
           _CounterBox(counter: counter, colorScheme: colorScheme),
           const SizedBox(height: 16),
           Text(
-            C.activity.targetDisplay(condition.displayName, dailyTarget),
+            C.activity.targetDisplay(condition.displayName, target),
             style: textTheme.bodyMedium?.copyWith(
               color: colorScheme.onSurface.withValues(alpha: 0.6),
               fontSize: context.text.labelMedium?.fontSize,
@@ -60,7 +57,7 @@ class ActivityUpdateDialog extends StatelessWidget {
       actionsAlignment: MainAxisAlignment.spaceEvenly,
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context, rootNavigator: true).maybePop(),
+          onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
           child: Text(
             C.common.cancel,
             style: TextStyle(
@@ -71,16 +68,12 @@ class ActivityUpdateDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
-            var hasError = await listingController.saveActivityProgress(
-              activity,
-              counter.value,
-              currentDailyDone,
-            );
-            if (hasError != null) {
-              '${C.activity.updateErrorBase}$hasError'.errorSnackbar();
+            final error = await onSave(counter.value);
+            if (error != null) {
+              '${C.activity.updateErrorBase}$error'.errorSnackbar();
             }
             if (context.mounted) {
-              Navigator.of(context, rootNavigator: true).maybePop();
+              Navigator.of(context, rootNavigator: true).pop();
             }
           },
           child: Text(
@@ -88,7 +81,7 @@ class ActivityUpdateDialog extends StatelessWidget {
             style: TextStyle(
               color: colorScheme.primary,
               fontSize: context.text.titleMedium?.fontSize,
-            )
+            ),
           ),
         ),
       ],
@@ -113,7 +106,6 @@ class _CounterBox extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          // EKSİ BUTONU
           Obx(() {
             final isMinusDisabled = counter.value <= 0;
             return Container(
@@ -129,8 +121,6 @@ class _CounterBox extends StatelessWidget {
               ),
             );
           }),
-
-          // ORTADAKİ RAKAM
           Obx(
             () => Text(
               '${counter.value}',
@@ -141,8 +131,6 @@ class _CounterBox extends StatelessWidget {
               ),
             ),
           ),
-
-          // ARTI BUTONU
           Container(
             decoration: BoxDecoration(
               color: colorScheme.primary.withValues(alpha: 0.75),

@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:yoldasim_app/core/constants/app_constants.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
 import 'package:yoldasim_app/data/models/activity_model.dart';
 import 'package:yoldasim_app/modules/home/controllers/calendar_controller.dart';
 import 'package:yoldasim_app/modules/home/controllers/listing_controller.dart';
 import 'package:yoldasim_app/modules/home/widgets/activity_listing/activity_stat_chip.dart';
-import 'package:yoldasim_app/modules/home/widgets/activity_listing/activity_update_dialog.dart';
 import 'package:yoldasim_app/modules/home/widgets/activity_listing/base_list_card.dart';
+import 'package:yoldasim_app/widgets/dialogs/binary_update_dialog.dart';
+import 'package:yoldasim_app/widgets/dialogs/counter_update_dialog.dart';
+
+typedef C = AppConstants;
 
 class ActivityRouter extends StatelessWidget {
   final ActivityModel activity;
@@ -29,7 +33,7 @@ class ActivityRouter extends StatelessWidget {
       case ActivityType.salah:
         return _salahActivityItem(context, activity: activity);
       case ActivityType.fasting:
-        return _fastingActivityItem(activity: activity);
+        return _fastingActivityItem(context, activity: activity);
       case ActivityType.dhikr:
         return _dhikrActivityItem(activity: activity);
       case ActivityType.quran:
@@ -67,7 +71,6 @@ class ActivityRouter extends StatelessWidget {
           isDailyMandatory: activity.isDailyMandatory,
         );
 
-
     return BaseActivityCard(
       activity: activity,
       iconPath: ActivityType.salah.iconPath,
@@ -79,19 +82,61 @@ class ActivityRouter extends StatelessWidget {
       ],
       onTap: () {
         Get.dialog(
-          ActivityUpdateDialog(
-            activity: activity,
-            currentDailyDone: dailyDone,
-            dailyTarget: dailyTarget,
+          CounterUpdateDialog(
+            currentValue: dailyDone,
+            target: dailyTarget,
             condition: condition,
+            onSave: (value) => listingController.saveActivityProgress(
+              activity,
+              value,
+              dailyDone,
+            ),
           ),
         );
       },
     );
   }
 
-  Widget _fastingActivityItem({required ActivityModel activity}) {
-    return SizedBox.shrink(); // TODO: Implement fasting activity item
+  Widget _fastingActivityItem(
+    BuildContext context, {
+    required ActivityModel activity,
+  }) {
+    final details = activity.fastingDetails!;
+    final int dailyDone = listingController.dailyDoneCounts[activity.id] ?? 0;
+    final color = ActivityType.fasting.color;
+    final status = listingController.calculateCompletionStatus(
+      dailyDone: dailyDone,
+      dailyTarget: 1,
+      condition: TargetCondition.atLeast,
+      selectedDate: calendarController.selectedDate.value,
+      isDailyMandatory: activity.isDailyMandatory,
+    );
+
+    return BaseActivityCard(
+      activity: activity,
+      iconPath: ActivityType.fasting.iconPath,
+      color: color,
+      status: status,
+      chips: [
+        ActivityStatChip(
+          value: '${details.totalDone}/${details.totalDebt}',
+          color: color,
+        ),
+      ],
+      onTap: () => Get.dialog(
+        BinaryUpdateDialog(
+          question: C.activity.fastingQuestion,
+          positiveLabel: C.common.yes,
+          negativeLabel: C.common.no,
+          errorMessagePrefix: C.activity.updateErrorBase,
+          onSave: (value) => listingController.saveActivityProgress(
+            activity,
+            value ? 1 : 0,
+            dailyDone,
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _dhikrActivityItem({required ActivityModel activity}) {

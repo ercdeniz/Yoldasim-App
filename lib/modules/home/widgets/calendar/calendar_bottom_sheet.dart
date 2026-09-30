@@ -44,7 +44,7 @@ class CalendarBottomSheet extends StatelessWidget {
                   isSameDay(calendarController.selectedDate.value, day),
               onDaySelected: (selectedDay, focusedDay) {
                 calendarController.selectDateFromCalendar(selectedDay);
-                Navigator.of(context, rootNavigator: true).maybePop();
+                Navigator.of(context, rootNavigator: true).pop();
               },
               headerStyle: HeaderStyle(
                 formatButtonVisible: false,
@@ -93,7 +93,7 @@ class CalendarBottomSheet extends StatelessWidget {
             children: [
               Expanded(
                 child: TextButton(
-                  onPressed: () => Navigator.of(context, rootNavigator: true).maybePop(),
+                  onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                   child: Text(
                     C.common.close,
                     style: TextStyle(color: textColor, fontSize: 16),
@@ -109,7 +109,7 @@ class CalendarBottomSheet extends StatelessWidget {
                 child: TextButton(
                   onPressed: () {
                     calendarController.jumpToToday();
-                    Navigator.of(context, rootNavigator: true).maybePop();
+                    Navigator.of(context, rootNavigator: true).pop();
                   },
                   child: Text(
                     C.common.today,

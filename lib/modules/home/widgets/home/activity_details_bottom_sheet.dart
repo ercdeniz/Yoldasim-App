@@ -88,7 +88,7 @@ class ActivityDetailsBottomSheet extends StatelessWidget {
 
                   // Sağ Kapatma Butonu
                   IconButton(
-                    onPressed: () => Navigator.of(context, rootNavigator: true).maybePop(),
+                    onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                     icon: const Icon(Icons.close, color: Colors.grey),
                     style: IconButton.styleFrom(
                       backgroundColor: Colors.grey.withValues(alpha: 0.1),
@@ -110,7 +110,6 @@ class ActivityDetailsBottomSheet extends StatelessWidget {
                 text: C.common.statistics,
                 color: Colors.blue,
                 onTap: () {
-                  Navigator.of(context, rootNavigator: true).maybePop();
                   // TODO: aktiviteye özel istatistik sayfasına yönlendir
                 },
               ),
@@ -119,7 +118,6 @@ class ActivityDetailsBottomSheet extends StatelessWidget {
                 text: C.common.edit,
                 color: Colors.orange,
                 onTap: () {
-                  Navigator.of(context, rootNavigator: true).maybePop();
                   // TODO: Düzenleme sayfası aç
                 },
               ),
@@ -129,7 +127,7 @@ class ActivityDetailsBottomSheet extends StatelessWidget {
                 color: Colors.red,
                 isDestructive: true,
                 onTap: () {
-                  Navigator.of(context, rootNavigator: true).maybePop();
+                  Navigator.of(context, rootNavigator: true).pop();
                   ActivityDeleteDialog.show(activity: activity);
                 },
               ),

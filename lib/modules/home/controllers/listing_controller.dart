@@ -62,7 +62,7 @@ class ListingController extends GetxController {
           case ActivityType.salah:
             _processSalahDetails(activity, difference);
           case ActivityType.fasting:
-          // TODO: burayı doldur
+            _processFastingDetails(activity, difference);
           case ActivityType.dhikr:
           // TODO: burayı doldur
           case ActivityType.quran:
@@ -83,6 +83,15 @@ class ListingController extends GetxController {
       activity.salahDetails!.totalDone += difference;
       if (activity.salahDetails!.totalDone < 0) {
         activity.salahDetails!.totalDone = 0;
+      }
+    }
+  }
+
+  void _processFastingDetails(ActivityModel activity, int difference) {
+    if (activity.fastingDetails != null) {
+      activity.fastingDetails!.totalDone += difference;
+      if (activity.fastingDetails!.totalDone < 0) {
+        activity.fastingDetails!.totalDone = 0;
       }
     }
   }

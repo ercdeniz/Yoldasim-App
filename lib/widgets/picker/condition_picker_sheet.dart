@@ -106,7 +106,7 @@ class AppConditionPickerSheet extends StatelessWidget {
         onTap: () {
           localCondition.value = condition;
           onConditionSelected(condition);
-          Navigator.of(context, rootNavigator: true).maybePop();
+          Navigator.of(context, rootNavigator: true).pop();
         },
       );
     });

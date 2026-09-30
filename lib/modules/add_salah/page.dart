@@ -29,7 +29,7 @@ class AddSalahPage extends GetView<AddSalahController> {
             ),
           ),
           onPressed: () =>
-              Navigator.of(context, rootNavigator: true).maybePop(),
+              Navigator.of(context, rootNavigator: true).pop(),
         ),
         actions: [
           Padding(
@@ -43,18 +43,17 @@ class AddSalahPage extends GetView<AddSalahController> {
                 ),
               ),
               onPressed: () async {
-                await controller.saveActivity().then((error) {
-                  if (error != null) {
-                    error.errorSnackbar();
-                  } else {
-                    if (context.mounted) {
-                      Navigator.of(context, rootNavigator: true).maybePop();
-                    }
-                    C.activity
-                        .successCreated(controller.selectedTimeText.value)
-                        .successSnackbar();
+                final error = await controller.saveActivity();
+                if (error != null) {
+                  error.errorSnackbar();
+                } else {
+                  if (context.mounted) {
+                    Navigator.of(context, rootNavigator: true).pop();
                   }
-                });
+                  C.activity
+                      .successCreated(controller.selectedTimeText.value)
+                      .successSnackbar();
+                }
               },
             ),
           ),

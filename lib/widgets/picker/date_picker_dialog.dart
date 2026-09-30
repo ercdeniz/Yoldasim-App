@@ -55,7 +55,7 @@ class AppDatePickerDialog extends StatelessWidget {
                 onDaySelected: (selectedDay, focusedDay) {
                   localSelectedDate.value = selectedDay;
                   onDateSelected(selectedDay);
-                  Navigator.of(context, rootNavigator: true).maybePop();
+                  Navigator.of(context, rootNavigator: true).pop();
                 },
                 headerStyle: _buildHeaderStyle(context, textColor),
                 daysOfWeekStyle: _buildDaysOfWeekStyle(),

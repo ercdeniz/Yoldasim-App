@@ -50,9 +50,7 @@ class AddSalahController extends GetxController {
           ..targetCondition = selectedTargetCondition.value
           ..totalDone = 0);
 
-      final isarService = Get.find<IsarService>();
-      await isarService.saveActivity(newActivity);
-
+      await Get.find<IsarService>().saveActivity(newActivity);
       return null;
     } catch (e) {
       return e.toString();

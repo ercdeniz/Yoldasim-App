@@ -83,7 +83,7 @@ class ActivityDeleteDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context, rootNavigator: true).maybePop();
+            Navigator.of(context, rootNavigator: true).pop();
           },
           child: Text(
             C.common.cancel,
@@ -95,7 +95,7 @@ class ActivityDeleteDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
-            Navigator.of(context, rootNavigator: true).maybePop();
+            Navigator.of(context, rootNavigator: true).pop();
             final error = await listingController.deleteActivity(activity.id);
 
             if (error != null) {

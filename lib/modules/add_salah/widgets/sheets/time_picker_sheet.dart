@@ -74,7 +74,7 @@ class SalahTimePickerSheet extends StatelessWidget {
         onTap: () {
           controller.selectedTime.value = time;
           controller.selectedTimeText.value = time.displayName;
-          Navigator.of(context, rootNavigator: true).maybePop();
+          Navigator.of(context, rootNavigator: true).pop();
         },
       );
     });
