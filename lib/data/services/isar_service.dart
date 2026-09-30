@@ -20,11 +20,18 @@ class IsarService extends GetxService {
   // --- KAYIT EKLEME / GÜNCELLEME (UPSERT) ---
   Future saveActivity(ActivityModel activity) async {
     activity.updatedAt = DateTime.now();
-    debugPrint(
-      'IsarService: Saving activity: ${activity.id} - ${activity.title}',
-    );
     await db.writeTxn(() async {
       await db.activityModels.put(activity);
+    });
+  }
+
+  Future deleteActivity(int activityId) async {
+    await db.writeTxn(() async {
+      await db.activityModels.delete(activityId);
+      await db.activityRecords
+          .filter()
+          .activityIdEqualTo(activityId)
+          .deleteAll();
     });
   }
 

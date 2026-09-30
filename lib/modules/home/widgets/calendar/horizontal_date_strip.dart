@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:yoldasim_app/core/extensions/date_extensions.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/modules/home/controllers/calendar_controller.dart';
 
 /// Tarih şeridi widgeti.
@@ -37,8 +38,8 @@ class HorizontalDateStrip extends StatelessWidget {
                 margin: const EdgeInsets.only(right: 8),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? context.theme.primaryColor
-                      : context.theme.cardColor,
+                      ? context.primary
+                      : context.cardColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
@@ -50,7 +51,7 @@ class HorizontalDateStrip extends StatelessWidget {
                         fontSize: 10,
                         color: isSelected
                             ? Colors.white
-                            : context.theme.textTheme.bodyMedium?.color,
+                            : context.text.bodyMedium?.color,
                         fontWeight: isSelected
                             ? FontWeight.bold
                             : FontWeight.normal,
@@ -63,7 +64,7 @@ class HorizontalDateStrip extends StatelessWidget {
                         fontSize: 16,
                         color: isSelected
                             ? Colors.white
-                            : context.theme.textTheme.bodyLarge?.color,
+                            : context.text.bodyLarge?.color,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

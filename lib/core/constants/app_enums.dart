@@ -1,11 +1,68 @@
 // Aktivite Tipleri
 
 import 'package:flutter/material.dart';
+import 'package:yoldasim_app/core/constants/app_assets.dart';
+import 'package:yoldasim_app/core/theme/app_colors.dart';
 
-enum ActivityType { salah, fasting, dhikr, quran }
+enum ActivityType {
+  salah,
+  fasting,
+  quran,
+  dhikr;
+
+  String get iconPath {
+    switch (this) {
+      case ActivityType.salah:
+        return AppAssets.iconSalah;
+      case ActivityType.fasting:
+        return AppAssets.iconFasting;
+      case ActivityType.quran:
+        return AppAssets.iconQuran;
+      case ActivityType.dhikr:
+        return AppAssets.iconDhikr;
+    }
+  }
+
+  Color get color {
+    switch (this) {
+      case ActivityType.salah:
+        return AppColors.salahColor;
+      case ActivityType.fasting:
+        return AppColors.fastingColor;
+      case ActivityType.quran:
+        return AppColors.quranColor;
+      case ActivityType.dhikr:
+        return AppColors.dhikrColor;
+    }
+  }
+}
 
 // Namaz Vakitleri
-enum SalahTime { fajr, dhuhr, asr, maghrib, isha, witr }
+enum SalahTime {
+  fajr,
+  dhuhr,
+  asr,
+  maghrib,
+  isha,
+  witr;
+
+  String get displayName {
+    switch (this) {
+      case SalahTime.fajr:
+        return 'Sabah Namazı';
+      case SalahTime.dhuhr:
+        return 'Öğle Namazı';
+      case SalahTime.asr:
+        return 'İkindi Namazı';
+      case SalahTime.maghrib:
+        return 'Akşam Namazı';
+      case SalahTime.isha:
+        return 'Yatsı Namazı';
+      case SalahTime.witr:
+        return 'Vitir Namazı';
+    }
+  }
+}
 
 // Zaman Periyotları
 enum ActivityPeriod { daily, weekly, monthly, yearly }
@@ -17,41 +74,44 @@ enum QuranTargetType { page, juz, surah }
 enum FieldRequirement { optional, mandatory }
 
 // Hedef Koşulları (En az, Tam, En fazla)
-enum TargetCondition { atLeast, exact, atMost }
+enum TargetCondition {
+  atLeast,
+  exact,
+  atMost;
 
-// Koşullar için uzantı metotları
-extension TargetConditionExtension on TargetCondition {
-  String get getText => switch (this) {
+  String get displayName => switch (this) {
     TargetCondition.atLeast => 'En az',
     TargetCondition.exact => 'Tam Olarak',
     TargetCondition.atMost => 'En fazla',
   };
-
   bool checkCompletion({required int done, required int target}) {
     return switch (this) {
       TargetCondition.atLeast => done >= target,
-      TargetCondition.exact   => done == target,
-      TargetCondition.atMost  => done <= target && done > 0,
+      TargetCondition.exact => done == target,
+      TargetCondition.atMost => done <= target && done > 0,
     };
   }
 }
 
 // Aktivite Durumları
-enum ActivityStatus { pending, completed, failed }
+enum ActivityStatus {
+  partial,
+  completed,
+  failed,
+  pending;
 
-// Aktivite Durumları için uzantı metotları
-extension ActivityStatusColor on ActivityStatus {
   Color get color {
     return switch (this) {
       ActivityStatus.completed => Colors.green,
-      ActivityStatus.pending => Colors.orange,
+      ActivityStatus.partial => Colors.orange,
       ActivityStatus.failed => Colors.red,
+      ActivityStatus.pending => Colors.grey,
     };
   }
 
   Color get bgColor {
     return switch (this) {
-      ActivityStatus.pending => Colors.transparent,
+      ActivityStatus.partial => Colors.transparent,
       _ => color.withValues(alpha: 0.2),
     };
   }
@@ -59,8 +119,9 @@ extension ActivityStatusColor on ActivityStatus {
   IconData get icon {
     return switch (this) {
       ActivityStatus.completed => Icons.check,
-      ActivityStatus.pending => Icons.more_horiz,
+      ActivityStatus.partial => Icons.more_horiz,
       ActivityStatus.failed => Icons.close,
+      ActivityStatus.pending => Icons.hourglass_empty,
     };
   }
 }

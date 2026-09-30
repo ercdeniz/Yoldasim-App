@@ -19,21 +19,21 @@ class ActivityRouter extends StatelessWidget {
   CalendarController get calendarController => Get.find<CalendarController>();
 
   /// Aktivite tipine göre uygun liste elemanını döndürür.
-  /// [salahActivityItem] : Namaz aktiviteleri için liste elemanı.
-  /// [fastingActivityItem] : Oruç aktiviteleri için liste elemanı.
-  /// [dhikrActivityItem] : Zikir aktiviteleri için liste elemanı.
-  /// [quranActivityItem] : Kur'an aktiviteleri için liste elemanı.
+  /// [_salahActivityItem] : Namaz aktiviteleri için liste elemanı.
+  /// [_fastingActivityItem] : Oruç aktiviteleri için liste elemanı.
+  /// [_dhikrActivityItem] : Zikir aktiviteleri için liste elemanı.
+  /// [_quranActivityItem] : Kur'an aktiviteleri için liste elemanı.
   @override
   Widget build(BuildContext context) {
     switch (activity.type) {
       case ActivityType.salah:
-        return salahActivityItem(context, activity: activity);
+        return _salahActivityItem(context, activity: activity);
       case ActivityType.fasting:
-        return fastingActivityItem(activity: activity);
+        return _fastingActivityItem(activity: activity);
       case ActivityType.dhikr:
-        return dhikrActivityItem(activity: activity);
+        return _dhikrActivityItem(activity: activity);
       case ActivityType.quran:
-        return quranActivityItem(activity: activity);
+        return _quranActivityItem(activity: activity);
     }
   }
 
@@ -46,7 +46,7 @@ class ActivityRouter extends StatelessWidget {
   /// [completed] : Aktivitenin tamamlanma durumu. [ListingController] içindeki [calculateCompletionStatus] fonksiyonu ile hesaplanır.
   /// [onTap] : Liste elemanına tıklandığında açılacak olan [ActivityUpdateDialog] dialogunu gönderen Callback fonksiyonudur.
   /// [completed] değeri controller'daki [calculateCompletionStatus] fonksiyonu ile belirlenir.
-  Widget salahActivityItem(
+  Widget _salahActivityItem(
     BuildContext context, {
     required ActivityModel activity,
   }) {
@@ -56,6 +56,7 @@ class ActivityRouter extends StatelessWidget {
     final int totalDone = details.totalDone;
     final int totalDebt = details.totalDebt;
     final TargetCondition condition = details.targetCondition;
+    final Color color = ActivityType.salah.color;
 
     final ActivityStatus completed = listingController
         .calculateCompletionStatus(
@@ -63,13 +64,13 @@ class ActivityRouter extends StatelessWidget {
           dailyTarget: dailyTarget,
           condition: condition,
           selectedDate: calendarController.selectedDate.value,
+          isDailyMandatory: activity.isDailyMandatory,
         );
 
-    Color color = Colors.teal;
 
     return BaseActivityCard(
-      title: activity.title,
-      iconData: Icons.mosque,
+      activity: activity,
+      iconPath: ActivityType.salah.iconPath,
       color: color,
       status: completed,
       chips: [
@@ -89,15 +90,15 @@ class ActivityRouter extends StatelessWidget {
     );
   }
 
-  Widget fastingActivityItem({required ActivityModel activity}) {
+  Widget _fastingActivityItem({required ActivityModel activity}) {
     return SizedBox.shrink(); // TODO: Implement fasting activity item
   }
 
-  Widget dhikrActivityItem({required ActivityModel activity}) {
+  Widget _dhikrActivityItem({required ActivityModel activity}) {
     return SizedBox.shrink(); // TODO: Implement dhikr activity item
   }
 
-  Widget quranActivityItem({required ActivityModel activity}) {
+  Widget _quranActivityItem({required ActivityModel activity}) {
     return SizedBox.shrink(); // TODO: Implement quran activity item
   }
 }

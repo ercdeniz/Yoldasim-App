@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
+import 'package:yoldasim_app/data/models/activity_model.dart';
+import 'package:yoldasim_app/modules/home/widgets/home/activity_details_bottom_sheet.dart';
 
 class BaseActivityCard extends StatelessWidget {
-  final String title;
-  final IconData iconData;
+  final ActivityModel activity;
+  final String iconPath;
   final Color color;
   final ActivityStatus status;
   final List<Widget> chips;
@@ -12,8 +15,8 @@ class BaseActivityCard extends StatelessWidget {
 
   const BaseActivityCard({
     super.key,
-    required this.title,
-    required this.iconData,
+    required this.activity,
+    required this.iconPath,
     required this.color,
     required this.status,
     required this.chips,
@@ -28,7 +31,7 @@ class BaseActivityCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: context.theme.colorScheme.secondaryContainer,
+          color: context.colors.secondaryContainer,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
@@ -39,10 +42,17 @@ class BaseActivityCard extends StatelessWidget {
               width: 46,
               height: 46,
               decoration: BoxDecoration(
-                color: color,
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: Icon(iconData, color: Colors.white, size: 23),
+              child: Center(
+                child: SvgPicture.asset(
+                  iconPath,
+                  width: 40,
+                  height: 40,
+                  colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                ),
+              ),
             ),
 
             const SizedBox(width: 14),
@@ -54,11 +64,11 @@ class BaseActivityCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    title,
+                    activity.title,
                     style: TextStyle(
-                      fontSize: context.theme.textTheme.titleMedium?.fontSize,
+                      fontSize: context.text.titleMedium?.fontSize,
                       fontWeight: FontWeight.bold,
-                      color: context.theme.textTheme.bodyLarge?.color,
+                      color: context.text.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -97,7 +107,11 @@ class BaseActivityCard extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   onPressed: () {
-                    // Menü tetikleyicisi
+                    ActivityDetailsBottomSheet.show(
+                      activity: activity,
+                      iconPath: iconPath,
+                      color: color,
+                    );
                   },
                 ),
               ],

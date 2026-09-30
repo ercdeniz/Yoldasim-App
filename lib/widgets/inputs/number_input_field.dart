@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/widgets/carts/field_requirement_badge.dart';
 
+
+// TODO boşluğa tıklayınca klavyenin kapanması için bişi yap
 class NumberInputField extends StatelessWidget {
   final String label;
   final String hint;
@@ -46,9 +49,9 @@ class NumberInputField extends StatelessWidget {
                     child: Text(
                       label,
                       style: TextStyle(
-                        fontSize: context.theme.textTheme.bodyMedium?.fontSize,
+                        fontSize: context.text.bodyMedium?.fontSize,
                         fontWeight:
-                            context.theme.textTheme.bodyMedium?.fontWeight,
+                            context.text.bodyMedium?.fontWeight,
                       ),
                     ),
                   ),
@@ -97,7 +100,7 @@ class NumberInputField extends StatelessWidget {
                           borderSide: BorderSide(
                             color: isError.value
                                 ? Colors.redAccent
-                                : context.theme.primaryColor,
+                                : context.primary,
                             width: 2.0,
                           ),
                           borderRadius: const BorderRadius.all(
@@ -116,7 +119,7 @@ class NumberInputField extends StatelessWidget {
                           vertical: 12,
                         ),
                         filled: true,
-                        fillColor: context.theme.scaffoldBackgroundColor
+                        fillColor: context.scaffoldBackgroundColor
                             .withValues(alpha: 0.5),
                       ),
                     ),

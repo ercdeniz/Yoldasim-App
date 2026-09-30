@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yoldasim_app/modules/home/controllers/main_controller.dart';
+import 'package:yoldasim_app/core/constants/app_constants.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
+import 'package:yoldasim_app/modules/home/controllers/home_controller.dart';
+
+typedef C = AppConstants;
 
 class HomeBottomAppBar extends StatelessWidget {
   const HomeBottomAppBar({super.key});
@@ -10,7 +14,7 @@ class HomeBottomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: context.theme.cardColor,
+      color: context.cardColor,
       shape: const CircularNotchedRectangle(),
       notchMargin: 8.0,
       child: SizedBox(
@@ -21,7 +25,7 @@ class HomeBottomAppBar extends StatelessWidget {
               Expanded(
                 child: _BottomNavItem(
                   icon: Icons.task_alt,
-                  label: 'Görevler',
+                  label: C.home.tasks,
                   index: 0,
                   isSelected: mainController.currentIndex.value == 0,
                   onTap: () => mainController.changePage(0),
@@ -31,7 +35,7 @@ class HomeBottomAppBar extends StatelessWidget {
               Expanded(
                 child: _BottomNavItem(
                   icon: Icons.bar_chart,
-                  label: 'İstatistikler',
+                  label: C.common.statistics,
                   index: 1,
                   isSelected: mainController.currentIndex.value == 1,
                   onTap: () => mainController.changePage(1),
@@ -63,8 +67,8 @@ class _BottomNavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isSelected
-        ? context.theme.primaryColor
-        : context.theme.textTheme.bodyMedium?.color;
+        ? context.primary
+        : context.text.bodyMedium?.color;
 
     return InkWell(
       onTap: onTap,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/modules/splash/controller.dart';
 
 // TODO: bunu düzenle
@@ -11,7 +12,7 @@ class SplashPage extends StatelessWidget {
     Get.put(SplashController());
 
     return Scaffold(
-      backgroundColor: context.theme.primaryColor,
+      backgroundColor: context.primary,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

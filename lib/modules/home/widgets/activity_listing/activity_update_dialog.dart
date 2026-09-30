@@ -1,10 +1,13 @@
-// lib/modules/home/widgets/activity_update_dialog.dart
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yoldasim_app/core/constants/app_constants.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
+import 'package:yoldasim_app/core/extensions/snackbar_extentions.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/data/models/activity_model.dart';
 import 'package:yoldasim_app/modules/home/controllers/listing_controller.dart';
+
+typedef C = AppConstants;
 
 class ActivityUpdateDialog extends StatelessWidget {
   final ActivityModel activity;
@@ -12,7 +15,6 @@ class ActivityUpdateDialog extends StatelessWidget {
   final int dailyTarget;
   final TargetCondition condition;
 
-  // TODO: bu dialogun görseli ve teması düzenlenecek
   const ActivityUpdateDialog({
     super.key,
     required this.activity,
@@ -21,104 +23,138 @@ class ActivityUpdateDialog extends StatelessWidget {
     required this.condition,
   });
 
-  // İlgili controller'a erişim
   ListingController get listingController => Get.find<ListingController>();
 
   @override
   Widget build(BuildContext context) {
-    // Diyalog içindeki yerel sayaç durumunu GetX RxInt ile reactive yapıyoruz
     final counter = currentDailyDone.obs;
 
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return AlertDialog(
-      backgroundColor: const Color(0xFF1E1E1E),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      title: const Center(
+      backgroundColor: colorScheme.surface,
+      title: Center(
         child: Text(
-          'Hedefi Güncelle',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          C.activity.updateTarget,
+          style: TextStyle(
+            fontSize: context.text.headlineSmall?.fontSize,
+            color: colorScheme.onSurface,
+          ),
         ),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // Eksi Butonu
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.cyan,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    onPressed: () {
-                      if (counter.value > 0) counter.value--;
-                    },
-                    icon: const Icon(Icons.remove, color: Colors.black),
-                  ),
-                ),
-                // Ortadaki Dev Rakam (Obx ile anlık güncellenir)
-                Obx(
-                  () => Text(
-                    '${counter.value}',
-                    style: const TextStyle(
-                      fontSize: 56,
-                      color: Colors.cyan,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                // Artı Butonu
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.cyan,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    onPressed: () => counter.value++,
-                    icon: const Icon(Icons.add, color: Colors.black),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
+          _CounterBox(counter: counter, colorScheme: colorScheme),
+          const SizedBox(height: 16),
           Text(
-            'Hedef: ${condition.getText} $dailyTarget',
-            style: const TextStyle(color: Colors.grey, fontSize: 16),
+            C.activity.targetDisplay(condition.displayName, dailyTarget),
+            style: textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurface.withValues(alpha: 0.6),
+              fontSize: context.text.labelMedium?.fontSize,
+            ),
           ),
         ],
       ),
       actionsAlignment: MainAxisAlignment.spaceEvenly,
       actions: [
         TextButton(
-          onPressed: () => Get.back(), // Navigator.pop yerine GetX kullanımı
-          child: const Text(
-            'Iptal',
-            style: TextStyle(color: Colors.white, fontSize: 18),
+          onPressed: () => Navigator.of(context, rootNavigator: true).maybePop(),
+          child: Text(
+            C.common.cancel,
+            style: TextStyle(
+              color: colorScheme.onSurface.withValues(alpha: 0.6),
+              fontSize: context.text.bodyLarge?.fontSize,
+            ),
           ),
         ),
         TextButton(
-          onPressed: () {
-            listingController.saveActivityProgress(
+          onPressed: () async {
+            var hasError = await listingController.saveActivityProgress(
               activity,
               counter.value,
               currentDailyDone,
             );
-            Get.back();
+            if (hasError != null) {
+              '${C.activity.updateErrorBase}$hasError'.errorSnackbar();
+            }
+            if (context.mounted) {
+              Navigator.of(context, rootNavigator: true).maybePop();
+            }
           },
-          child: const Text(
-            'Guncelle',
-            style: TextStyle(color: Colors.cyan, fontSize: 18),
+          child: Text(
+            C.common.update,
+            style: TextStyle(
+              color: colorScheme.primary,
+              fontSize: context.text.titleMedium?.fontSize,
+            )
           ),
         ),
       ],
+    );
+  }
+}
+
+class _CounterBox extends StatelessWidget {
+  final RxInt counter;
+  final ColorScheme colorScheme;
+
+  const _CounterBox({required this.counter, required this.colorScheme});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+      decoration: BoxDecoration(
+        color: colorScheme.primary.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          // EKSİ BUTONU
+          Obx(() {
+            final isMinusDisabled = counter.value <= 0;
+            return Container(
+              decoration: BoxDecoration(
+                color: isMinusDisabled
+                    ? colorScheme.primary.withValues(alpha: 0.35)
+                    : colorScheme.primary.withValues(alpha: 0.75),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                onPressed: isMinusDisabled ? null : () => counter.value--,
+                icon: Icon(Icons.remove, color: colorScheme.surface),
+              ),
+            );
+          }),
+
+          // ORTADAKİ RAKAM
+          Obx(
+            () => Text(
+              '${counter.value}',
+              style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                fontSize: 56,
+                color: colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+
+          // ARTI BUTONU
+          Container(
+            decoration: BoxDecoration(
+              color: colorScheme.primary.withValues(alpha: 0.75),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              onPressed: () => counter.value++,
+              icon: Icon(Icons.add, color: colorScheme.surface),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

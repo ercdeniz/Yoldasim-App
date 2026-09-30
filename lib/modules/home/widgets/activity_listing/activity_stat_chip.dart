@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 
 /// Aktivite istatistik çipi.
 /// [value] : Çip üzerinde gösterilecek değer.
@@ -17,16 +17,14 @@ class ActivityStatChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: context.theme.colorScheme.secondaryContainer.withValues(
-          alpha: 0.1,
-        ),
+        color: context.colors.secondaryContainer.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
         value,
         style: TextStyle(
-          fontSize: context.theme.textTheme.labelSmall?.fontSize,
-          fontWeight: context.theme.textTheme.labelSmall?.fontWeight,
+          fontSize: context.text.labelSmall?.fontSize,
+          fontWeight: context.text.labelSmall?.fontWeight,
           color: color,
         ),
       ),

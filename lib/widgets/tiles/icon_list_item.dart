@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/widgets/carts/field_requirement_badge.dart';
 
 class AddPageListItem extends StatelessWidget {
@@ -57,7 +57,7 @@ class AddPageListItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize:
-                                context.theme.textTheme.bodyMedium?.fontSize,
+                                context.text.bodyMedium?.fontSize,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

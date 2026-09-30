@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yoldasim_app/core/constants/app_constants.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 
 typedef C = AppConstants;
 
@@ -12,7 +13,7 @@ class MandatorySwitchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: context.theme.colorScheme.secondaryContainer,
+      color: context.colors.secondaryContainer,
       borderRadius: BorderRadius.circular(16),
       clipBehavior: Clip.antiAlias,
       child: Obx(
@@ -20,20 +21,20 @@ class MandatorySwitchCard extends StatelessWidget {
           title: Text(
             C.activity.mandatory,
             style: TextStyle(
-              fontSize: context.theme.textTheme.titleMedium?.fontSize,
+              fontSize: context.text.titleMedium?.fontSize,
             ),
           ),
           subtitle: Text(
             C.activity.mandatoryDesc,
             style: TextStyle(
-              fontSize: context.theme.textTheme.labelSmall?.fontSize,
+              fontSize: context.text.labelSmall?.fontSize,
             ),
           ),
           value: isMandatory.value,
           onChanged: (value) {
             isMandatory.value = value;
           },
-          activeThumbColor: context.theme.primaryColor,
+          activeThumbColor: context.primary,
         ),
       ),
     );

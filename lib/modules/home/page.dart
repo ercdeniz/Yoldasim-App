@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:yoldasim_app/core/constants/app_constants.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/modules/home/controllers/calendar_controller.dart';
 import 'package:yoldasim_app/modules/home/widgets/activity_listing/activity_listing.dart';
 import 'package:yoldasim_app/modules/home/widgets/calendar/calendar_bottom_sheet.dart';
 import 'package:yoldasim_app/modules/home/widgets/calendar/horizontal_date_strip.dart';
 import 'package:yoldasim_app/modules/home/widgets/home/add_activity_list_bottom_sheet.dart';
 import 'package:yoldasim_app/modules/home/widgets/home/bottom_app_bar.dart';
-import 'package:yoldasim_app/routes/app_routes.dart';
 
-import 'controllers/main_controller.dart';
+import 'controllers/home_controller.dart';
 
 typedef C = AppConstants;
 
@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: context.theme.primaryColor.withValues(alpha: 0.15),
+              color: context.primary.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
@@ -46,15 +46,12 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: context.theme.primaryColor,
+                      color: context.primary,
                     ),
                   ),
                 ),
                 const SizedBox(width: 4),
-                Icon(
-                  Icons.keyboard_arrow_down,
-                  color: context.theme.primaryColor,
-                ),
+                Icon(Icons.keyboard_arrow_down, color: context.primary),
               ],
             ),
           ),
@@ -63,7 +60,7 @@ class HomePage extends StatelessWidget {
       body: Column(children: [HorizontalDateStrip(), ActivityListing()]),
       floatingActionButton: FloatingActionButton(
         onPressed: () => AddActivityBottomSheet.show(),
-        backgroundColor: context.theme.primaryColor,
+        backgroundColor: context.primary,
         elevation: 4,
         shape: const CircleBorder(),
         child: const Icon(Icons.add, size: 32, color: Colors.white),

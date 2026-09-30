@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:yoldasim_app/core/constants/app_constants.dart';
-import 'package:yoldasim_app/core/constants/app_enums.dart';
+import 'package:yoldasim_app/core/extensions/snackbar_extentions.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/modules/add_salah/controller.dart';
+import 'package:yoldasim_app/modules/add_salah/widgets/fields/salah_debt_target_section.dart';
+import 'package:yoldasim_app/modules/add_salah/widgets/fields/salah_time_date_section.dart';
 import 'package:yoldasim_app/widgets/carts/mandatory_switch_card.dart';
-import 'package:yoldasim_app/widgets/inputs/number_input_field.dart';
-import 'package:yoldasim_app/widgets/tiles/icon_list_item.dart';
 
 typedef C = AppConstants;
 
@@ -16,12 +16,9 @@ class AddSalahPage extends GetView<AddSalahController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.theme.scaffoldBackgroundColor,
+      backgroundColor: context.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(
-          C.activity.salahTitle,
-          style: context.theme.textTheme.titleLarge,
-        ),
+        title: Text(C.activity.salahTitle, style: context.text.titleLarge),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 20),
@@ -31,7 +28,8 @@ class AddSalahPage extends GetView<AddSalahController> {
               borderRadius: BorderRadius.circular(20),
             ),
           ),
-          onPressed: () => Get.back(),
+          onPressed: () =>
+              Navigator.of(context, rootNavigator: true).maybePop(),
         ),
         actions: [
           Padding(
@@ -39,15 +37,24 @@ class AddSalahPage extends GetView<AddSalahController> {
             child: IconButton(
               icon: const Icon(Icons.check, size: 20),
               style: IconButton.styleFrom(
-                backgroundColor: context.theme.primaryColor.withValues(
-                  alpha: 0.5,
-                ),
+                backgroundColor: context.primary.withValues(alpha: 0.5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              onPressed: () {
-                controller.saveActivity();
+              onPressed: () async {
+                await controller.saveActivity().then((error) {
+                  if (error != null) {
+                    error.errorSnackbar();
+                  } else {
+                    if (context.mounted) {
+                      Navigator.of(context, rootNavigator: true).maybePop();
+                    }
+                    C.activity
+                        .successCreated(controller.selectedTimeText.value)
+                        .successSnackbar();
+                  }
+                });
               },
             ),
           ),
@@ -60,111 +67,13 @@ class AddSalahPage extends GetView<AddSalahController> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                // VAKİT SEÇİMİ
-                Material(
-                  color: context.theme.colorScheme.secondaryContainer,
-                  borderRadius: BorderRadius.circular(16),
-                  clipBehavior: Clip.antiAlias,
-                  child: Column(
-                    children: [
-                      AddPageListItem(
-                        title: C.activity.salahTime,
-                        subtitle: Obx(
-                          () => Text(controller.selectedTimeText.value),
-                        ),
-                        icon: Icons.access_time_filled,
-                        requirement: FieldRequirement.mandatory,
-                        iconBGColor: Colors.blueAccent,
-                        onTap: () {
-                          controller.showTimePickerSheet(context);
-                        },
-                      ),
-                      // Başlangıç Tarihi Seçimi
-                      AddPageListItem(
-                        title: C.activity.pickStartDate,
-                        subtitle: Obx(
-                          () => Text(
-                            DateFormat(
-                              'dd MMMM yyyy',
-                              'tr_TR',
-                            ).format(controller.selectedStartDate.value),
-                          ),
-                        ),
-                        icon: Icons.calendar_today,
-                        requirement: FieldRequirement.optional,
-                        iconBGColor: Colors.greenAccent,
-                        onTap: () {
-                          controller.pickStartDate(context);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-
+                const SalahDateTimeSection(),
                 const SizedBox(height: 16),
-
-                // BORÇ VE HEDEF GİRİŞİ
-                Material(
-                  color: context.theme.colorScheme.secondaryContainer,
-                  borderRadius: BorderRadius.circular(16),
-                  clipBehavior: Clip.antiAlias,
-                  child: Column(
-                    children: [
-                      NumberInputField(
-                        label: C.activity.salahTotalDebt,
-                        hint: 'Örn: 300',
-                        requirement: FieldRequirement.mandatory,
-                        onChanged: (value) =>
-                            controller.totalDebt.value = value,
-                        isError: controller.isTotalDebtEmpty,
-                      ),
-
-                      NumberInputField(
-                        label: C.activity.dailyTarget,
-                        hint: 'Örn: 5',
-                        requirement: FieldRequirement.mandatory,
-                        onChanged: (value) =>
-                            controller.dailyTarget.value = value,
-                        isError: controller.isDailyTargetEmpty,
-                        trailing: conditionPicker(context),
-                      ),
-                    ],
-                  ),
-                ),
-
+                const SalahDebtTargetSection(),
                 const SizedBox(height: 16),
-
-                // ZORUNLULUK AYARI
                 MandatorySwitchCard(isMandatory: controller.isDailyMandatory),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  InkWell conditionPicker(BuildContext context) {
-    return InkWell(
-      onTap: () => controller.showConditionPickerSheet(context),
-      borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Obx(
-          () => Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                controller.targetConditionNames[controller
-                    .selectedTargetCondition
-                    .value]!,
-                style: TextStyle(color: context.theme.primaryColor),
-              ),
-              Icon(
-                Icons.keyboard_arrow_down,
-                color: context.theme.primaryColor,
-              ),
-            ],
           ),
         ),
       ),

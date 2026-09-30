@@ -1,30 +1,31 @@
-// lib/modules/home/widgets/calendar_bottom_sheet.dart
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:yoldasim_app/core/constants/app_constants.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/modules/home/controllers/calendar_controller.dart';
+
+typedef C = AppConstants;
 
 class CalendarBottomSheet extends StatelessWidget {
   const CalendarBottomSheet({super.key});
 
-  // Controller'a erişim (StatelessWidget olduğu için rahatça Get.find yapıyoruz)
   CalendarController get calendarController => Get.find<CalendarController>();
 
-  /// Bu bottom sheet'i ekranda açan statik tetikleyici metot
   static void show() {
     Get.bottomSheet(const CalendarBottomSheet(), isScrollControlled: true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final textColor = context.theme.textTheme.bodyLarge?.color;
-    final passiveTextColor = context.theme.textTheme.bodyMedium?.color
-        ?.withValues(alpha: 0.5);
+    final textColor = context.text.bodyLarge?.color;
+    final passiveTextColor = context.text.bodyMedium?.color?.withValues(
+      alpha: 0.5,
+    );
 
     return Container(
       decoration: BoxDecoration(
-        color: context.theme.scaffoldBackgroundColor,
+        color: context.scaffoldBackgroundColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: const EdgeInsets.all(16),
@@ -43,7 +44,7 @@ class CalendarBottomSheet extends StatelessWidget {
                   isSameDay(calendarController.selectedDate.value, day),
               onDaySelected: (selectedDay, focusedDay) {
                 calendarController.selectDateFromCalendar(selectedDay);
-                Get.back();
+                Navigator.of(context, rootNavigator: true).maybePop();
               },
               headerStyle: HeaderStyle(
                 formatButtonVisible: false,
@@ -72,11 +73,11 @@ class CalendarBottomSheet extends StatelessWidget {
                 outsideTextStyle: TextStyle(color: passiveTextColor),
                 todayDecoration: const BoxDecoration(color: Colors.transparent),
                 todayTextStyle: TextStyle(
-                  color: context.theme.primaryColor,
+                  color: context.primary,
                   fontWeight: FontWeight.bold,
                 ),
                 selectedDecoration: BoxDecoration(
-                  color: context.theme.primaryColor,
+                  color: context.primary,
                   shape: BoxShape.circle,
                 ),
                 selectedTextStyle: const TextStyle(
@@ -92,9 +93,9 @@ class CalendarBottomSheet extends StatelessWidget {
             children: [
               Expanded(
                 child: TextButton(
-                  onPressed: () => Get.back(),
+                  onPressed: () => Navigator.of(context, rootNavigator: true).maybePop(),
                   child: Text(
-                    'KAPAT',
+                    C.common.close,
                     style: TextStyle(color: textColor, fontSize: 16),
                   ),
                 ),
@@ -108,14 +109,11 @@ class CalendarBottomSheet extends StatelessWidget {
                 child: TextButton(
                   onPressed: () {
                     calendarController.jumpToToday();
-                    Get.back();
+                    Navigator.of(context, rootNavigator: true).maybePop();
                   },
                   child: Text(
-                    'BUGÜN',
-                    style: TextStyle(
-                      color: context.theme.primaryColor,
-                      fontSize: 16,
-                    ),
+                    C.common.today,
+                    style: TextStyle(color: context.primary, fontSize: 16),
                   ),
                 ),
               ),

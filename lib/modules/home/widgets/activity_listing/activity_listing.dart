@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_utils/src/extensions/context_extensions.dart';
 import 'package:get/state_manager.dart';
 import 'package:yoldasim_app/core/constants/app_constants.dart';
 import 'package:yoldasim_app/core/extensions/date_extensions.dart';
+import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/modules/home/controllers/calendar_controller.dart';
 import 'package:yoldasim_app/modules/home/controllers/listing_controller.dart';
-import 'package:yoldasim_app/modules/home/controllers/main_controller.dart';
+import 'package:yoldasim_app/modules/home/controllers/home_controller.dart';
 import 'package:yoldasim_app/modules/home/widgets/activity_listing/activity_router.dart';
 
 typedef C = AppConstants;
@@ -40,8 +40,8 @@ class ActivityListing extends StatelessWidget {
             child: Text(
               C.home.noActivity,
               style: TextStyle(
-                fontSize: context.theme.textTheme.titleMedium?.fontSize,
-                color: context.theme.textTheme.bodyMedium?.color,
+                fontSize: context.text.titleMedium?.fontSize,
+                color: context.text.bodyMedium?.color,
               ),
             ),
           );

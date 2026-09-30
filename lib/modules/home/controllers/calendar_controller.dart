@@ -4,10 +4,13 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:isar/isar.dart';
+import 'package:yoldasim_app/core/constants/app_constants.dart';
 import 'package:yoldasim_app/core/extensions/date_extensions.dart';
 import 'package:yoldasim_app/data/models/activity_record.dart';
 import 'package:yoldasim_app/data/services/isar_service.dart';
 import 'package:yoldasim_app/modules/home/controllers/listing_controller.dart';
+
+typedef C = AppConstants;
 
 class CalendarController extends GetxController {
   final isarService = Get.find<IsarService>();
@@ -121,7 +124,7 @@ class CalendarController extends GetxController {
     if (date.year == now.year &&
         date.month == now.month &&
         date.day == now.day) {
-      return "Bugün";
+      return C.common.today;
     }
     return DateFormat('MMM d, yyyy', 'tr_TR').format(date);
   }
