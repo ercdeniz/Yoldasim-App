@@ -70,7 +70,7 @@ class AddSalahPage extends GetView<AddSalahController> {
                 const SizedBox(height: 16),
                 const SalahDebtTargetSection(),
                 const SizedBox(height: 16),
-                MandatorySwitchCard(isMandatory: controller.isDailyMandatory),
+                MandatorySwitchCard(isMandatory: controller.isMandatory),
               ],
             ),
           ),

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:yoldasim_app/core/constants/app_assets.dart';
+import 'package:yoldasim_app/core/constants/app_constants.dart';
 import 'package:yoldasim_app/core/theme/app_colors.dart';
 
 enum ActivityType {
@@ -65,10 +66,46 @@ enum SalahTime {
 }
 
 // Zaman Periyotları
-enum ActivityPeriod { daily, weekly, monthly, yearly }
+enum ActivityPeriod {
+  daily,
+  weekly,
+  monthly,
+  yearly,
+  allTime;
+
+  String get displayName {
+    switch (this) {
+      case ActivityPeriod.daily:
+        return AppConstants.activity.periodDaily;
+      case ActivityPeriod.weekly:
+        return AppConstants.activity.periodWeekly;
+      case ActivityPeriod.monthly:
+        return AppConstants.activity.periodMonthly;
+      case ActivityPeriod.yearly:
+        return AppConstants.activity.periodYearly;
+      case ActivityPeriod.allTime:
+        return AppConstants.activity.periodAllTime;
+    }
+  }
+}
 
 // Kur'an Hedef Tipleri
-enum QuranTargetType { page, juz, surah }
+enum QuranTargetType {
+  page,
+  juz,
+  surah;
+
+  String get displayName {
+    switch (this) {
+      case QuranTargetType.page:
+        return AppConstants.activity.quranPage;
+      case QuranTargetType.juz:
+        return AppConstants.activity.quranJuz;
+      case QuranTargetType.surah:
+        return AppConstants.activity.quranSurah;
+    }
+  }
+}
 
 // Alan Zorunluluk Durumu (0: Opsiyonel, 1: Zorunlu)
 enum FieldRequirement { optional, mandatory }

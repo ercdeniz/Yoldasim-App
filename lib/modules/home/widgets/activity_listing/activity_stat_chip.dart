@@ -22,6 +22,7 @@ class ActivityStatChip extends StatelessWidget {
       ),
       child: Text(
         value,
+        textAlign: TextAlign.justify,
         style: TextStyle(
           fontSize: context.text.labelSmall?.fontSize,
           fontWeight: context.text.labelSmall?.fontWeight,

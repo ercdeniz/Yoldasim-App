@@ -24,7 +24,6 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
 
-      // ROTLARI BURADA BAĞLIYORUZ
     initialRoute: AppRoutes.SPLASH,
       getPages: AppPages.pages,
     );

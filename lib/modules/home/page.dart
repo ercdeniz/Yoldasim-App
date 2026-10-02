@@ -7,8 +7,8 @@ import 'package:yoldasim_app/modules/home/controllers/calendar_controller.dart';
 import 'package:yoldasim_app/modules/home/widgets/activity_listing/activity_listing.dart';
 import 'package:yoldasim_app/modules/home/widgets/calendar/calendar_bottom_sheet.dart';
 import 'package:yoldasim_app/modules/home/widgets/calendar/horizontal_date_strip.dart';
-import 'package:yoldasim_app/modules/home/widgets/home/add_activity_list_bottom_sheet.dart';
-import 'package:yoldasim_app/modules/home/widgets/home/bottom_app_bar.dart';
+import 'package:yoldasim_app/modules/home/widgets/main_page/add_activity_list_bottom_sheet.dart';
+import 'package:yoldasim_app/modules/home/widgets/main_page/bottom_app_bar.dart';
 
 import 'controllers/home_controller.dart';
 

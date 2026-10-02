@@ -20,7 +20,7 @@ class AddSalahController extends GetxController {
   var dailyTarget = ''.obs;
 
   // Zorunluluk durumu
-  var isDailyMandatory = false.obs;
+  var isMandatory = false.obs;
 
   // Hata kontrolü
   var isTotalDebtEmpty = false.obs;
@@ -42,13 +42,12 @@ class AddSalahController extends GetxController {
         ..type = ActivityType.salah
         ..period = ActivityPeriod.daily
         ..startDate = selectedStartDate.value
-        ..isDailyMandatory = isDailyMandatory.value
+        ..isMandatory = isMandatory.value
         ..salahDetails = (SalahDetails()
           ..salahTime = selectedTime.value!
           ..totalDebt = int.tryParse(totalDebt.value) ?? 0
           ..dailyTarget = int.tryParse(dailyTarget.value) ?? 0
-          ..targetCondition = selectedTargetCondition.value
-          ..totalDone = 0);
+          ..targetCondition = selectedTargetCondition.value);
 
       await Get.find<IsarService>().saveActivity(newActivity);
       return null;

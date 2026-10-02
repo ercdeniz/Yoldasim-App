@@ -5,6 +5,7 @@ import 'package:yoldasim_app/core/extensions/date_extensions.dart';
 import 'package:yoldasim_app/data/models/activity_model.dart';
 import 'package:yoldasim_app/data/models/activity_record.dart';
 import 'package:yoldasim_app/data/services/isar_service.dart';
+import 'package:yoldasim_app/data/services/activity_schedule_service.dart';
 import 'package:yoldasim_app/modules/home/controllers/calendar_controller.dart';
 
 /// Aktivite listeleme ve günlük ilerleme kaydı ile ilgili işlemleri yöneten kontrolcü
@@ -18,10 +19,66 @@ class ListingController extends GetxController {
   /// Ekranda gösterilecek günlük veriler.
   var dailyDoneCounts = <int, int>{}.obs;
 
+  /// Seçili tarihin içinde bulunduğu periyottaki toplam ilerlemeler.
+  var periodDoneCounts = <int, int>{}.obs;
+
+  String? _lastScheduleSignature;
+
   @override
   void onInit() {
     super.onInit();
     activities.bindStream(isarService.listenToActivities());
+    ever(activities, (_) {
+      final signature = _scheduleSignature();
+      if (signature == _lastScheduleSignature) return;
+
+      _lastScheduleSignature = signature;
+      refreshPeriodDoneCounts();
+    });
+  }
+
+  /// Seçili tarihe göre periyodik aktivite ilerlemelerini günceller.
+  Future<void> refreshPeriodDoneCounts({int? activityId}) async {
+    final selectedDate = calendarController.selectedDate.value;
+    final nextCounts = activityId == null
+        ? <int, int>{}
+        : Map<int, int>.from(periodDoneCounts);
+    final activitiesToRefresh = activityId == null
+        ? activities.toList()
+        : activities.where((activity) => activity.id == activityId);
+
+    for (final activity in activitiesToRefresh) {
+      final range = ActivityScheduleService.periodRange(
+        activity.period,
+        selectedDate,
+      );
+      final records = await isarService.db.activityRecords
+          .filter()
+          .activityIdEqualTo(activity.id)
+          .dateBetween(range.start, range.end, includeUpper: false)
+          .findAll();
+      nextCounts[activity.id] = records.fold(
+        0,
+        (total, record) => total + record.doneCount,
+      );
+    }
+
+    periodDoneCounts.value = nextCounts;
+  }
+
+  /// Aktivite planının değişip değişmediğini kontrol etmek için bir imza oluşturur.
+  String _scheduleSignature() {
+    return activities
+        .map(
+          (activity) => [
+            activity.id,
+            activity.period.index,
+            activity.startDate.millisecondsSinceEpoch,
+            activity.schedule.weeklyDays.join(','),
+            activity.schedule.monthlyDays.join(','),
+          ].join(':'),
+        )
+        .join('|');
   }
 
   /// Aktivitenin güncel ilerlemesini hesaplar ve döndürür.
@@ -58,76 +115,104 @@ class ListingController extends GetxController {
         }
         await isarService.db.activityRecords.put(record);
 
-        switch (activity.type) {
-          case ActivityType.salah:
-            _processSalahDetails(activity, difference);
-          case ActivityType.fasting:
-            _processFastingDetails(activity, difference);
-          case ActivityType.dhikr:
-          // TODO: burayı doldur
-          case ActivityType.quran:
-          // TODO: burayı doldur
+        activity.totalDone += difference;
+        if (activity.totalDone < 0) {
+          activity.totalDone = 0;
         }
         await isarService.db.activityModels.put(activity);
       });
 
-      await calendarController.getDailyRecordsForDate();
+      await calendarController.getDailyRecordsForDate(activityId: activity.id);
       return null;
     } catch (e) {
       return e.toString();
     }
   }
 
-  void _processSalahDetails(ActivityModel activity, int difference) {
-    if (activity.salahDetails != null) {
-      activity.salahDetails!.totalDone += difference;
-      if (activity.salahDetails!.totalDone < 0) {
-        activity.salahDetails!.totalDone = 0;
-      }
-    }
-  }
-
-  void _processFastingDetails(ActivityModel activity, int difference) {
-    if (activity.fastingDetails != null) {
-      activity.fastingDetails!.totalDone += difference;
-      if (activity.fastingDetails!.totalDone < 0) {
-        activity.fastingDetails!.totalDone = 0;
-      }
-    }
-  }
-
-  /// Aktivitenin güncel durumunu hesaplar ve döndürür.
-  ///
-  /// Eğer aktivite tamamlanmışsa [ActivityStatus.completed] döner.
-  ///
-  /// Aşağıdaki durumlardan biri gerçekleşirse durum [ActivityStatus.failed] olur:
-  /// Şu şartlardan biri gerçekleşirse aktivite başarısız sayılır:
-  /// * [condition], [TargetCondition.atMost] ise ve [dailyDone] miktarı [dailyTarget] değerini aştıysa.
-  /// * [condition], [TargetCondition.exact] ise ve [dailyDone] miktarı [dailyTarget] değerini aştıysa.
-  /// * Seçilen [target] tarihi, [current] tarihten geçmişteyse ve [isDailyMandatory] zorunlu ise.
-  ///
-  /// Yukarıdaki şartlar sağlanmazsa, aktivite [ActivityStatus.partial] olarak kalır.
+  /// Günlük aktivitenin güncel durumunu hesaplar.
+  /// [calculatePeriodCompletionStatus] ile farkı şudur:
+  /// Bu fonksiyon, sadece günlük aktivitenin durumunu hesaplar
+  /// Bunun için [periodEnd] parametresi, seçili günün bir sonraki günü olarak belirlenir.
   ActivityStatus calculateCompletionStatus({
     required int dailyDone,
     required int dailyTarget,
     required TargetCondition condition,
     required DateTime? selectedDate,
-    required bool isDailyMandatory,
+    required bool isMandatory,
   }) {
-    if (condition.checkCompletion(done: dailyDone, target: dailyTarget)) {
+    final targetDate = selectedDate!.onlyDate;
+    return _calculateCompletionStatusCore(
+      done: dailyDone,
+      target: dailyTarget,
+      condition: condition,
+      periodEnd: targetDate.add(const Duration(days: 1)),
+      isMandatory: isMandatory,
+    );
+  }
+
+  /// Periyodik veya tüm zamanlı aktivitenin güncel durumunu hesaplar.
+  /// [calculateCompletionStatus] ile farkı şudur:
+  /// Aktivitenin periyodunun bitiş tarihini dikkate alır ve periyodik ilerlemeyi değerlendirir.
+  ActivityStatus calculatePeriodCompletionStatus({
+    required int periodDone,
+    required int periodTarget,
+    required TargetCondition condition,
+    required DateTime selectedDate,
+    required DateTime periodEnd,
+    required bool isMandatory,
+    required bool isOpenEnded,
+  }) {
+    return _calculateCompletionStatusCore(
+      done: periodDone,
+      target: periodTarget,
+      condition: condition,
+      periodEnd: periodEnd,
+      isMandatory: isMandatory,
+      isOpenEnded: isOpenEnded,
+    );
+  }
+
+  /// Aktivitenin (Günlük veya Dönemsel) güncel durumunu hesaplayan ana mekanizma.
+  ///
+  /// Eğer hedeflenen miktar başarıyla tamamlanmışsa [ActivityStatus.completed] döner.
+  ///
+  /// Aşağıdaki durumlardan biri gerçekleşirse durum [ActivityStatus.failed] olur:
+  /// * [condition], [TargetCondition.atMost] ise ve yapılan [done] miktarı [target] değerini aştıysa.
+  /// * [condition], [TargetCondition.exact] ise ve yapılan [done] miktarı [target] değerini aştıysa.
+  /// * Aktivite periyodu/günü bitmişse ([periodEnd] tarihi geçildiyse) ve aktivite [isMandatory] (zorunlu) ise.
+  ///
+  /// Eğer aktivite süresi/periyodu bitmiş, hedef tamamlanmamış ve [isMandatory] zorunlu değilse, durum [ActivityStatus.pending] olur.
+  ///
+  /// Yukarıdaki şartların hiçbiri sağlanmazsa (süre henüz bitmediyse ve hedef aşılmadıysa), aktivite [ActivityStatus.partial] olarak kalır.
+  ActivityStatus _calculateCompletionStatusCore({
+    required int done,
+    required int target,
+    required TargetCondition condition,
+    required DateTime periodEnd,
+    required bool isMandatory,
+    required bool isOpenEnded,
+  }) {
+    if (condition.checkCompletion(done: done, target: target)) {
       return ActivityStatus.completed;
     }
 
-    if ((condition == TargetCondition.atMost && dailyDone > dailyTarget) ||
-        (condition == TargetCondition.exact && dailyDone > dailyTarget)) {
+    if (isOpenEnded) {
+      return ActivityStatus.partial;
+    }
+
+    final exceedsTarget =
+        (condition == TargetCondition.atMost && done > target) ||
+        (condition == TargetCondition.exact && done > target);
+    if (exceedsTarget) {
       return ActivityStatus.failed;
     }
 
-    if (selectedDate!.onlyDate.compareTo(DateTime.now().onlyDate) < 0) {
-      return isDailyMandatory ? ActivityStatus.failed : ActivityStatus.pending;
-    } else {
-      return ActivityStatus.partial;
+    final hasEnded = !DateTime.now().onlyDate.isBefore(periodEnd.onlyDate);
+    if (hasEnded) {
+      return isMandatory ? ActivityStatus.failed : ActivityStatus.pending;
     }
+
+    return ActivityStatus.partial;
   }
 
   /// Aktivite silme işlemi

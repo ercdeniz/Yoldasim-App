@@ -68,7 +68,7 @@ class AddFastingPage extends GetView<AddFastingController> {
 							children: [
 								const FastingFormSection(),
 								const SizedBox(height: 16),
-								MandatorySwitchCard(isMandatory: controller.isDailyMandatory),
+								MandatorySwitchCard(isMandatory: controller.isMandatory),
 							],
 						),
 					),

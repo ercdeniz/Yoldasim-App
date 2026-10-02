@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
 import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/data/models/activity_model.dart';
-import 'package:yoldasim_app/modules/home/widgets/home/activity_details_bottom_sheet.dart';
+import 'package:yoldasim_app/modules/home/widgets/main_page/activity_details_bottom_sheet.dart';
 
 class BaseActivityCard extends StatelessWidget {
   final ActivityModel activity;
@@ -11,7 +11,8 @@ class BaseActivityCard extends StatelessWidget {
   final Color color;
   final ActivityStatus status;
   final List<Widget> chips;
-  final VoidCallback onTap;
+  final VoidCallback onCardTap;
+  final VoidCallback onProgressTap;
 
   const BaseActivityCard({
     super.key,
@@ -20,13 +21,14 @@ class BaseActivityCard extends StatelessWidget {
     required this.color,
     required this.status,
     required this.chips,
-    required this.onTap,
+    required this.onCardTap,
+    required this.onProgressTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onCardTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(8),
@@ -88,15 +90,22 @@ class BaseActivityCard extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: status.bgColor,
-                    border: Border.all(color: status.color, width: 1.5),
+                GestureDetector(
+                  onTap: onProgressTap,
+                  behavior: HitTestBehavior.opaque,
+                  child: Padding(
+                    padding: const EdgeInsets.all(6),
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: status.bgColor,
+                        border: Border.all(color: status.color, width: 1.5),
+                      ),
+                      child: Icon(status.icon, color: status.color, size: 16),
+                    ),
                   ),
-                  child: Icon(status.icon, color: status.color, size: 16),
                 ),
                 IconButton(
                   icon: const Icon(

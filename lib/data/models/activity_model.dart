@@ -19,10 +19,15 @@ class ActivityModel {
   @enumerated
   TargetCondition targetCondition = TargetCondition.atLeast;
 
-  // --- ESNEKLİK ALANI ---
-  // true: Her gün/hafta yapılması ZORUNLUDUR (Yapılmazsa zincir kırılır/başarısız sayılır).
-  // false: ESNEKTİR. Yapıldığı günler haneye yazılır, yapılmadığı günler ceza kesilmez (Örn: Oruç kazası).
-  bool isDailyMandatory = false;
+  // true: Planlı günlerde tamamlanması zorunludur ve genel yüzdeye dahil edilir.
+  // false: Planlı günlerde isteğe bağlıdır; yapılmadığında başarısız sayılmaz.
+  bool isMandatory = false;
+
+  // Tüm aktivite türleri için hızlı erişilen toplam ilerleme cache'i.
+  int totalDone = 0;
+
+  // Her aktivite bir plan taşır; günlük aktivitelerde listeler boş kalır.
+  ActivitySchedule schedule = ActivitySchedule();
 
   // --- ZAMAN DAMGASI ---
   DateTime startDate = DateTime.now();
@@ -42,7 +47,6 @@ class SalahDetails {
   SalahTime salahTime = SalahTime.fajr; // fajr, dhuhr, asr, maghrib, isha, witr
 
   int totalDebt = 0; // Toplam borç (Örn: 300 vakit)
-  int totalDone = 0; // Şu ana kadar yapılan toplam (Örn: 150 vakit)
   int dailyTarget = 0; // Günlük eritme hedefi
 
   @enumerated
@@ -52,7 +56,6 @@ class SalahDetails {
 @embedded
 class FastingDetails {
   int totalDebt = 0; // Toplam tutulması gereken gün
-  int totalDone = 0; // Şu ana kadar yapılan toplam
 }
 
 @embedded
@@ -67,4 +70,15 @@ class QuranDetails {
   @enumerated
   QuranTargetType targetType = QuranTargetType.page; // page (sayfa), juz (cüz), surah (sure)
   int targetValue = 0; // Örn: 5 (sayfa), 1 (cüz), 1 (sure)
+  List<int> selectedJuzNumbers = []; // Seçilen cüzlerin numaraları (1..30)
+  int selectedSurahNumber = 0; // Seçilen sure numarası (1..114)
+}
+
+@embedded
+class ActivitySchedule {
+  // Haftanın günleri: Pazartesi 1, Pazar 7.
+  List<int> weeklyDays = [];
+
+  // Ayın günleri: 1..31.
+  List<int> monthlyDays = [];
 }

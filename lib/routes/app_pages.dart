@@ -1,6 +1,10 @@
 import 'package:get/get.dart';
 import 'package:yoldasim_app/modules/add_fasting/binding.dart';
 import 'package:yoldasim_app/modules/add_fasting/page.dart';
+import 'package:yoldasim_app/modules/add_quran/binding.dart';
+import 'package:yoldasim_app/modules/add_quran/page.dart';
+import 'package:yoldasim_app/modules/add_dhikr/binding.dart';
+import 'package:yoldasim_app/modules/add_dhikr/page.dart';
 import 'package:yoldasim_app/modules/add_salah/binding.dart';
 import 'package:yoldasim_app/modules/add_salah/page.dart';
 import 'package:yoldasim_app/modules/splash/binding.dart';
@@ -41,19 +45,15 @@ class AppPages {
       binding: AddFastingBinding(),
     ),
 
-    /*
     GetPage(
       name: AppRoutes.DHIKR,
       page: () => const AddDhikrPage(),
       binding: AddDhikrBinding(),
     ),
-    */
-    /*
     GetPage(
       name: AppRoutes.QURAN,
       page: () => const AddQuranPage(),
       binding: AddQuranBinding(),
     ),
-    */
   ];
 }

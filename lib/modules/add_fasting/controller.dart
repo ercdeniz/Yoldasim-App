@@ -8,48 +8,47 @@ typedef C = AppConstants;
 
 class AddFastingController extends GetxController {
   /// Toplam borç miktarı
-	var totalDebt = ''.obs;
+  var totalDebt = ''.obs;
 
   /// Günlük zorunluluk durumu
-	var isDailyMandatory = false.obs;
+  var isMandatory = false.obs;
 
   /// Hata kontrolü
-	var isTotalDebtEmpty = false.obs;
+  var isTotalDebtEmpty = false.obs;
 
   /// Başlangıç tarihi
-	var selectedStartDate = DateTime.now().obs;
+  var selectedStartDate = DateTime.now().obs;
 
-	Future<String?> saveActivity() async {
-		final validationError = _validateInputs();
-		if (validationError != null) {
-			return validationError;
-		}
+  Future<String?> saveActivity() async {
+    final validationError = _validateInputs();
+    if (validationError != null) {
+      return validationError;
+    }
 
-		try {
-			final newActivity = ActivityModel()
-				..title = C.activity.fastingTitle
-				..type = ActivityType.fasting
-				..period = ActivityPeriod.daily
-				..startDate = selectedStartDate.value
-				..isDailyMandatory = isDailyMandatory.value
-				..fastingDetails = (FastingDetails()
-					..totalDebt = int.parse(totalDebt.value)
-					..totalDone = 0);
+    try {
+      final newActivity = ActivityModel()
+        ..title = C.activity.fastingTitle
+        ..type = ActivityType.fasting
+        ..period = ActivityPeriod.daily
+        ..startDate = selectedStartDate.value
+        ..isMandatory = isMandatory.value
+        ..fastingDetails = (FastingDetails()
+          ..totalDebt = int.parse(totalDebt.value));
 
-			await Get.find<IsarService>().saveActivity(newActivity);
-			return null;
-		} catch (e) {
-			return e.toString();
-		}
-	}
+      await Get.find<IsarService>().saveActivity(newActivity);
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
+  }
 
-	String? _validateInputs() {
-		isTotalDebtEmpty.value = totalDebt.value.trim().isEmpty;
+  String? _validateInputs() {
+    isTotalDebtEmpty.value = totalDebt.value.trim().isEmpty;
 
-		if (isTotalDebtEmpty.value) {
-			return C.activity.errFastingTotalDebtEmpty;
-		}
+    if (isTotalDebtEmpty.value) {
+      return C.activity.errFastingTotalDebtEmpty;
+    }
 
-		return null;
-	}
+    return null;
+  }
 }

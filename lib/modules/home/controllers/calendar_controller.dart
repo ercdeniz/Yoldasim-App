@@ -102,7 +102,7 @@ class CalendarController extends GetxController {
   }
 
   /// Takvimden seçili günün kayıtlarını veritabanından çeker
-  Future getDailyRecordsForDate() async {
+  Future getDailyRecordsForDate({int? activityId}) async {
     final targetDate = selectedDate.value.onlyDate;
 
     final records = await isarService.db.activityRecords
@@ -115,6 +115,7 @@ class CalendarController extends GetxController {
       newMap[record.activityId] = record.doneCount;
     }
     listingController.dailyDoneCounts.value = newMap;
+    await listingController.refreshPeriodDoneCounts(activityId: activityId);
   }
 
   /// APPBAR BAŞLIK FORMATLAYICI

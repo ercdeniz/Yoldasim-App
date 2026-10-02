@@ -4,6 +4,7 @@ import 'package:get/state_manager.dart';
 import 'package:yoldasim_app/core/constants/app_constants.dart';
 import 'package:yoldasim_app/core/extensions/date_extensions.dart';
 import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
+import 'package:yoldasim_app/data/services/activity_schedule_service.dart';
 import 'package:yoldasim_app/modules/home/controllers/calendar_controller.dart';
 import 'package:yoldasim_app/modules/home/controllers/listing_controller.dart';
 import 'package:yoldasim_app/modules/home/controllers/home_controller.dart';
@@ -32,7 +33,8 @@ class ActivityListing extends StatelessWidget {
           final targetDate = calendarController.selectedDate.value.onlyDate;
           final activityDate = activity.startDate.onlyDate;
 
-          return targetDate.compareTo(activityDate) >= 0;
+            return targetDate.compareTo(activityDate) >= 0 &&
+              ActivityScheduleService.isScheduledOnDate(activity, targetDate);
         }).toList();
 
         if (filteredActivities.isEmpty) {
