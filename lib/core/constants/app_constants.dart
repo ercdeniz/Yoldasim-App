@@ -17,14 +17,14 @@ class AppConstants {
     'Aralık',
   ];
 
-  static const shortDaysOfWeek = [
-    'Pzt',
-    'Sal',
-    'Çar',
-    'Per',
-    'Cum',
-    'Cmt',
-    'Paz',
+  static const daysOfWeek = [
+    'Pazartesi',
+    'Salı',
+    'Çarşamba',
+    'Perşembe',
+    'Cuma',
+    'Cumartesi',
+    'Pazar',
   ];
 
   // --- ARAYÜZ METİNLERİ (STRINGS) ---

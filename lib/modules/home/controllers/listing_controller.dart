@@ -129,10 +129,21 @@ class ListingController extends GetxController {
     }
   }
 
-  /// Günlük aktivitenin güncel durumunu hesaplar.
-  /// [calculatePeriodCompletionStatus] ile farkı şudur:
-  /// Bu fonksiyon, sadece günlük aktivitenin durumunu hesaplar
-  /// Bunun için [periodEnd] parametresi, seçili günün bir sonraki günü olarak belirlenir.
+  /// Günlük periyoda sahip aktivitelerin (Namaz, Oruç vb.) seçili tarihteki
+  /// tamamlanma durumunu hesaplar.
+  ///
+  /// Aktivite süresinin sonunu otomatik olarak seçilen günün ertesi gününün
+  /// başlangıcı (`targetDate + 1 gün`, 00:00:00) olarak belirler ve süresiz
+  /// olduğunu (`isOpenEnded: false`) varsayarak durum kontrolünü
+  /// [_calculateCompletionStatusCore] fonksiyonuna devreder.
+  ///
+  /// * [dailyDone]: Kullanıcının o gün için kaydettiği tamamlanma adedi.
+  /// * [dailyTarget]: O gün için ulaşılması beklenen hedef adet.
+  /// * [condition]: Hedefin tamamlanma kuralı (`atLeast`, `exact`, `atMost`).
+  /// * [selectedDate]: Takvimde o an incelenen ve üzerinde işlem yapılan gün.
+  /// * [isMandatory]: Aktivitenin zorunlu olup olmadığı bilgisi.
+  ///
+  /// Dönüş Değeri: Aktivitenin durumunu ifade eden [ActivityStatus] değeri.
   ActivityStatus calculateCompletionStatus({
     required int dailyDone,
     required int dailyTarget,
@@ -147,12 +158,27 @@ class ListingController extends GetxController {
       condition: condition,
       periodEnd: targetDate.add(const Duration(days: 1)),
       isMandatory: isMandatory,
+      isOpenEnded: false,
     );
   }
 
-  /// Periyodik veya tüm zamanlı aktivitenin güncel durumunu hesaplar.
-  /// [calculateCompletionStatus] ile farkı şudur:
-  /// Aktivitenin periyodunun bitiş tarihini dikkate alır ve periyodik ilerlemeyi değerlendirir.
+  /// Dönemsel (Haftalık, Aylık, Yıllık veya Tüm Zamanlar) aktivitelerin (Kur'an, Zikir vb.)
+  /// tamamlanma durumunu hesaplar.
+  ///
+  /// Günlük hesaplayıcıdan farklı olarak, periyodun bitiş tarihini ([periodEnd])
+  /// ve periyodun süresiz olup olmadığını ([isOpenEnded]) dışarıdan dinamik olarak
+  /// alır ve değerlendirmeyi [_calculateCompletionStatusCore] fonksiyonuna aktarır.
+  ///
+  /// * [periodDone]: İlgili periyot aralığında kaydedilen toplam tamamlanma adedi.
+  /// * [periodTarget]: İlgili periyot için belirlenmiş hedef miktar.
+  /// * [condition]: Hedef kuralı (`atLeast`, `exact`, `atMost`).
+  /// * [selectedDate]: Takvimde o an seçili olan tarih.
+  /// * [periodEnd]: Periyodun tamamlandığı/sona erdiği sınır tarihi.
+  /// * [isMandatory]: Aktivitenin zorunlu olup olmadığı bilgisi.
+  /// * [isOpenEnded]: Aktivitenin "Tüm Zamanlar" gibi belirli bir bitiş süresi
+  ///   olmayan açık uçlu bir yapıda olup olmadığı bilgisi.
+  ///
+  /// Dönüş Değeri: Aktivitenin durumunu ifade eden [ActivityStatus] değeri.
   ActivityStatus calculatePeriodCompletionStatus({
     required int periodDone,
     required int periodTarget,
@@ -172,18 +198,25 @@ class ListingController extends GetxController {
     );
   }
 
-  /// Aktivitenin (Günlük veya Dönemsel) güncel durumunu hesaplayan ana mekanizma.
+  /// Aktivite durumunu (Tamamlandı, Başarısız, Kısmi, Bekliyor) hesaplayan çekirdek mekanizma.
   ///
-  /// Eğer hedeflenen miktar başarıyla tamamlanmışsa [ActivityStatus.completed] döner.
+  /// Mantıksal Değerlendirme Sırası:
+  /// 1. Hedef tutturulduysa (`condition.checkCompletion`) -> [ActivityStatus.completed]
+  /// 2. Süresiz bir aktiviteyse ve hedef tutturulmadıysa -> [ActivityStatus.partial]
+  /// 3. Hedef sınırı aşıldıysa (`atMost` veya `exact` kuralı bozulduysa) -> [ActivityStatus.failed]
+  /// 4. Aktivite süresi/periyodu bittiyse:
+  ///    - Zorunlu (`isMandatory == true`) ise -> [ActivityStatus.failed]
+  ///    - Opsiyonel (`isMandatory == false`) ise -> [ActivityStatus.pending]
+  /// 5. Süre henüz dolmadıysa ve hedef aşılmadıysa -> [ActivityStatus.partial]
   ///
-  /// Aşağıdaki durumlardan biri gerçekleşirse durum [ActivityStatus.failed] olur:
-  /// * [condition], [TargetCondition.atMost] ise ve yapılan [done] miktarı [target] değerini aştıysa.
-  /// * [condition], [TargetCondition.exact] ise ve yapılan [done] miktarı [target] değerini aştıysa.
-  /// * Aktivite periyodu/günü bitmişse ([periodEnd] tarihi geçildiyse) ve aktivite [isMandatory] (zorunlu) ise.
+  /// * [done]: Gerçekleşen işlem adedi (günlük veya periyodik).
+  /// * [target]: Ulaşılması gereken hedef miktar.
+  /// * [condition]: Karşılaştırma kuralı (`TargetCondition`).
+  /// * [periodEnd]: Değerlendirilen zaman aralığının bitiş anı.
+  /// * [isMandatory]: Aktivite yapılmadığında başarısız sayılıp sayılmayacağı.
+  /// * [isOpenEnded]: Bitiş süresi olmayan aktiviteler için zaman kontrolünü atlama bayrağı.
   ///
-  /// Eğer aktivite süresi/periyodu bitmiş, hedef tamamlanmamış ve [isMandatory] zorunlu değilse, durum [ActivityStatus.pending] olur.
-  ///
-  /// Yukarıdaki şartların hiçbiri sağlanmazsa (süre henüz bitmediyse ve hedef aşılmadıysa), aktivite [ActivityStatus.partial] olarak kalır.
+  /// Dönüş Değeri: Koşulların sonucuna göre belirlenen [ActivityStatus].
   ActivityStatus _calculateCompletionStatusCore({
     required int done,
     required int target,
