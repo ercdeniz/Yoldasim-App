@@ -6,12 +6,12 @@ import 'package:yoldasim_app/data/models/activity_model.dart';
 import 'package:yoldasim_app/modules/home/widgets/activity_listing/activity_delete_dialog.dart';
 import 'package:yoldasim_app/widgets/utils/drag_hendle.dart';
 
-class ActivityDetailsBottomSheet extends StatelessWidget {
+class ActivityOptionsBottomSheet extends StatelessWidget {
   final ActivityModel activity;
   final String iconPath;
   final Color color;
 
-  const ActivityDetailsBottomSheet({
+  const ActivityOptionsBottomSheet({
     super.key,
     required this.activity,
     required this.iconPath,
@@ -24,7 +24,7 @@ class ActivityDetailsBottomSheet extends StatelessWidget {
     required Color color,
   }) {
     Get.bottomSheet(
-      ActivityDetailsBottomSheet(
+      ActivityOptionsBottomSheet(
         activity: activity,
         iconPath: iconPath,
         color: color,

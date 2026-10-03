@@ -77,6 +77,21 @@ class ActivityRouter extends StatelessWidget {
           isMandatory: activity.isMandatory,
         );
 
+    void onTapUpdate() {
+      Get.dialog(
+        CounterUpdateDialog(
+          currentValue: dailyDone,
+          target: dailyTarget,
+          condition: condition,
+          onSave: (value) => listingController.saveActivityProgress(
+            activity,
+            value,
+            dailyDone,
+          ),
+        ),
+      );
+    }
+
     return BaseActivityCard(
       activity: activity,
       iconPath: ActivityType.salah.iconPath,
@@ -86,21 +101,10 @@ class ActivityRouter extends StatelessWidget {
         ActivityStatChip(value: '$dailyDone/$dailyTarget', color: color),
         ActivityStatChip(value: '$totalDone/$totalDebt', color: color),
       ],
-      onCardTap: () => Get.dialog(ActivityDetailDialog(activity: activity)),
-      onProgressTap: () {
-        Get.dialog(
-          CounterUpdateDialog(
-            currentValue: dailyDone,
-            target: dailyTarget,
-            condition: condition,
-            onSave: (value) => listingController.saveActivityProgress(
-              activity,
-              value,
-              dailyDone,
-            ),
-          ),
-        );
-      },
+      onCardTap: () => Get.dialog(
+        ActivityDetailDialog(activity: activity, onTapUpdate: onTapUpdate),
+      ),
+      onProgressTap: onTapUpdate,
     );
   }
 
@@ -119,19 +123,8 @@ class ActivityRouter extends StatelessWidget {
       isMandatory: activity.isMandatory,
     );
 
-    return BaseActivityCard(
-      activity: activity,
-      iconPath: ActivityType.fasting.iconPath,
-      color: color,
-      status: status,
-      chips: [
-        ActivityStatChip(
-          value: '${activity.totalDone}/${details.totalDebt}',
-          color: color,
-        ),
-      ],
-      onCardTap: () => Get.dialog(ActivityDetailDialog(activity: activity)),
-      onProgressTap: () => Get.dialog(
+    void onTapUpdate() {
+      Get.dialog(
         BinaryUpdateDialog(
           question: C.activity.fastingQuestion,
           positiveLabel: C.common.yes,
@@ -143,7 +136,24 @@ class ActivityRouter extends StatelessWidget {
             dailyDone,
           ),
         ),
+      );
+    }
+
+    return BaseActivityCard(
+      activity: activity,
+      iconPath: ActivityType.fasting.iconPath,
+      color: color,
+      status: status,
+      chips: [
+        ActivityStatChip(
+          value: '${activity.totalDone}/${details.totalDebt}',
+          color: color,
+        ),
+      ],
+      onCardTap: () => Get.dialog(
+        ActivityDetailDialog(activity: activity, onTapUpdate: onTapUpdate),
       ),
+      onProgressTap: onTapUpdate,
     );
   }
 
@@ -169,6 +179,21 @@ class ActivityRouter extends StatelessWidget {
       isOpenEnded: activity.period == ActivityPeriod.allTime,
     );
 
+    void onTapUpdate() {
+      Get.dialog(
+        CounterUpdateDialog(
+          currentValue: dailyDone,
+          target: details.targetCount,
+          condition: activity.targetCondition,
+          onSave: (value) => listingController.saveActivityProgress(
+            activity,
+            value,
+            dailyDone,
+          ),
+        ),
+      );
+    }
+
     return BaseActivityCard(
       activity: activity,
       iconPath: ActivityType.dhikr.iconPath,
@@ -181,19 +206,10 @@ class ActivityRouter extends StatelessWidget {
         ),
         ActivityStatChip(value: details.arabicText.truncate(20), color: color),
       ],
-      onCardTap: () => Get.dialog(ActivityDetailDialog(activity: activity)),
-      onProgressTap: () => Get.dialog(
-        CounterUpdateDialog(
-          currentValue: dailyDone,
-          target: details.targetCount,
-          condition: activity.targetCondition,
-          onSave: (value) => listingController.saveActivityProgress(
-            activity,
-            value,
-            dailyDone,
-          ),
-        ),
+      onCardTap: () => Get.dialog(
+        ActivityDetailDialog(activity: activity, onTapUpdate: onTapUpdate),
       ),
+      onProgressTap: onTapUpdate,
     );
   }
 
@@ -223,6 +239,21 @@ class ActivityRouter extends StatelessWidget {
         ? C.activity.quranSurahNames[details.selectedSurahNumber - 1]
         : details.targetType.displayName;
 
+    void onTapUpdate() {
+      Get.dialog(
+        CounterUpdateDialog(
+          currentValue: dailyDone,
+          target: details.targetValue,
+          condition: activity.targetCondition,
+          onSave: (value) => listingController.saveActivityProgress(
+            activity,
+            value,
+            dailyDone,
+          ),
+        ),
+      );
+    }
+
     return BaseActivityCard(
       activity: activity,
       iconPath: ActivityType.quran.iconPath,
@@ -240,19 +271,10 @@ class ActivityRouter extends StatelessWidget {
             color: color,
           ),
       ],
-      onCardTap: () => Get.dialog(ActivityDetailDialog(activity: activity)),
-      onProgressTap: () => Get.dialog(
-        CounterUpdateDialog(
-          currentValue: dailyDone,
-          target: details.targetValue,
-          condition: activity.targetCondition,
-          onSave: (value) => listingController.saveActivityProgress(
-            activity,
-            value,
-            dailyDone,
-          ),
-        ),
+      onCardTap: () => Get.dialog(
+        ActivityDetailDialog(activity: activity, onTapUpdate: onTapUpdate),
       ),
+      onProgressTap: onTapUpdate,
     );
   }
 }

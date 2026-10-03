@@ -4,19 +4,39 @@ import 'package:yoldasim_app/core/constants/app_enums.dart';
 import 'package:yoldasim_app/core/extensions/date_extensions.dart';
 import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/data/models/activity_model.dart';
+import 'package:yoldasim_app/widgets/carts/field_requirement_badge.dart';
 
 typedef C = AppConstants;
 
 /// Aktivitenin detaylarını gösteren bir dialog açar.
 class ActivityDetailDialog extends StatelessWidget {
   final ActivityModel activity;
+  final VoidCallback onTapUpdate;
 
-  const ActivityDetailDialog({super.key, required this.activity});
+  const ActivityDetailDialog({
+    super.key,
+    required this.activity,
+    required this.onTapUpdate,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(activity.title),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: Text(activity.title)),
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: FieldRequirementBadge(
+              requirement: activity.isMandatory
+                  ? FieldRequirement.mandatory
+                  : FieldRequirement.optional,
+            ),
+          ),
+        ],
+      ),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -34,21 +54,43 @@ class ActivityDetailDialog extends StatelessWidget {
               C.activity.detailStartDate,
               activity.startDate.formattedDate,
             ),
-            // Zorunluluk
-            _detailRow(
-              context,
-              C.activity.detailRequirement,
-              activity.isMandatory ? C.activity.mandatory : C.common.optional,
-            ),
             // ÖZEL DETAYLAR
             ..._activityDetails(context),
           ],
         ),
       ),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-          child: Text(C.common.close),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            // Kapat Butonu - Arka plansız, oldukça sade ve dinamik genişlikte
+            Expanded(
+              child: TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                style: TextButton.styleFrom(
+                  foregroundColor: context.onSurface.withValues(alpha: 0.6),
+                ),
+                child: Text(C.common.close),
+              ),
+            ),
+
+            const SizedBox(width: 12),
+            Expanded(
+              child: FilledButton(
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                  onTapUpdate();
+                },
+                style: FilledButton.styleFrom(
+                  backgroundColor: context.primary,
+                  shape: StadiumBorder(),
+                ),
+                child: Text(C.common.update),
+              ),
+            ),
+          ],
         ),
       ],
     );

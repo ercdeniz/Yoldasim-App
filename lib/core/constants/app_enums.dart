@@ -50,17 +50,17 @@ enum SalahTime {
   String get displayName {
     switch (this) {
       case SalahTime.fajr:
-        return 'Sabah Namazı';
+        return 'Sabah Kazası';
       case SalahTime.dhuhr:
-        return 'Öğle Namazı';
+        return 'Öğle Kazası';
       case SalahTime.asr:
-        return 'İkindi Namazı';
+        return 'İkindi Kazası';
       case SalahTime.maghrib:
-        return 'Akşam Namazı';
+        return 'Akşam Kazası';
       case SalahTime.isha:
-        return 'Yatsı Namazı';
+        return 'Yatsı Kazası';
       case SalahTime.witr:
-        return 'Vitir Namazı';
+        return 'Vitir Kazası';
     }
   }
 }

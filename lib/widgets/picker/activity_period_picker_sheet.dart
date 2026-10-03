@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:yoldasim_app/core/constants/app_constants.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
 import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
-import 'package:yoldasim_app/widgets/picker/dual_list/components/dual_list_draggable_splitter.dart';
 import 'package:yoldasim_app/widgets/utils/drag_hendle.dart';
 
 typedef C = AppConstants;

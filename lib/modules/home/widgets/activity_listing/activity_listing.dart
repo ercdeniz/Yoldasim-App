@@ -25,6 +25,7 @@ class ActivityListing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
     return Expanded(
       child: Obx(() {
         final filteredActivities = listingController.activities.where((
@@ -33,7 +34,7 @@ class ActivityListing extends StatelessWidget {
           final targetDate = calendarController.selectedDate.value.onlyDate;
           final activityDate = activity.startDate.onlyDate;
 
-            return targetDate.compareTo(activityDate) >= 0 &&
+          return targetDate.compareTo(activityDate) >= 0 &&
               ActivityScheduleService.isScheduledOnDate(activity, targetDate);
         }).toList();
 
@@ -50,7 +51,7 @@ class ActivityListing extends StatelessWidget {
         }
 
         return ListView.builder(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16).copyWith(bottom: bottomPadding + 20),
           itemCount: filteredActivities.length,
           itemBuilder: (context, index) {
             final activity = filteredActivities[index];

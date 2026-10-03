@@ -22,6 +22,8 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.lightBackground,
       elevation: 0,
+      scrolledUnderElevation: 0,
+      surfaceTintColor: Colors.transparent,
       centerTitle: false,
       iconTheme: IconThemeData(color: AppColors.lightText),
       titleTextStyle: TextStyle(
@@ -67,6 +69,8 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.darkBackground,
       elevation: 0,
+      scrolledUnderElevation: 0,
+      surfaceTintColor: Colors.transparent,
       centerTitle: false,
       iconTheme: IconThemeData(color: AppColors.darkText),
       titleTextStyle: TextStyle(

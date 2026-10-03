@@ -25,6 +25,7 @@ class HomePage extends StatelessWidget {
     initializeDateFormatting('tr_TR', null);
 
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         centerTitle: true,
         title: GestureDetector(

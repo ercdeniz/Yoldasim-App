@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
 import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/data/models/activity_model.dart';
-import 'package:yoldasim_app/modules/home/widgets/main_page/activity_details_bottom_sheet.dart';
+import 'package:yoldasim_app/modules/home/widgets/main_page/activity_options_bottom_sheet.dart';
 
 class BaseActivityCard extends StatelessWidget {
   final ActivityModel activity;
@@ -116,7 +116,7 @@ class BaseActivityCard extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   onPressed: () {
-                    ActivityDetailsBottomSheet.show(
+                    ActivityOptionsBottomSheet.show(
                       activity: activity,
                       iconPath: iconPath,
                       color: color,

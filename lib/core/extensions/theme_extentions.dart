@@ -7,6 +7,7 @@ extension ContextThemeExtention on BuildContext {
 
   // --- RENKLER ---
   Color get primary => colors.primary;
+  Color get onPrimary => colors.onPrimary;
   Color get onSurface => colors.onSurface;
   Color get surface => colors.surface;
   Color get error => colors.error;
