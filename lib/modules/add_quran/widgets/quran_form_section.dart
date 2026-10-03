@@ -8,12 +8,12 @@ import 'package:yoldasim_app/modules/add_quran/controller.dart';
 import 'package:yoldasim_app/widgets/inputs/number_input_field.dart';
 import 'package:yoldasim_app/widgets/picker/activity_period_picker_sheet.dart';
 import 'package:yoldasim_app/widgets/picker/activity_schedule_picker_sheet.dart';
-import 'package:yoldasim_app/widgets/picker/quran_target_type_picker_sheet.dart';
-import 'package:yoldasim_app/widgets/picker/quran_juz_picker_sheet.dart';
-import 'package:yoldasim_app/widgets/picker/quran_surah_picker_sheet.dart';
+import 'package:yoldasim_app/modules/add_quran/widgets/quran_target_type_picker_sheet.dart';
+import 'package:yoldasim_app/modules/add_quran/widgets/quran_juz_picker_sheet.dart';
+import 'package:yoldasim_app/modules/add_quran/widgets/quran_surah_picker/quran_surah_picker_sheet.dart';
 import 'package:yoldasim_app/widgets/picker/target_condition_picker_button.dart';
 import 'package:yoldasim_app/widgets/tiles/icon_list_item.dart';
-import 'package:yoldasim_app/widgets/picker/date_picker_dialog.dart';
+import 'package:yoldasim_app/widgets/dialogs/date_picker_dialog.dart';
 
 typedef C = AppConstants;
 
@@ -96,7 +96,7 @@ class QuranFormSection extends GetView<AddQuranController> {
                   controller.selectedPeriod.value == ActivityPeriod.allTime
                 ? const SizedBox.shrink()
                 : AddPageListItem(
-                    title: C.activity.scheduledDays,
+                    title: C.activity.selectDays,
                     subtitle: Text(controller.scheduleSummary),
                     icon: Icons.event_available,
                     requirement: FieldRequirement.mandatory,

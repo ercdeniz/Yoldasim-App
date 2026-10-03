@@ -94,7 +94,7 @@ class CalendarController extends GetxController {
 
         itemScrollController.animateTo(
           clampedPosition,
-          duration: const Duration(milliseconds: 250),
+          duration: Duration(milliseconds: C.common.animationDuration),
           curve: Curves.easeInOut,
         );
       }

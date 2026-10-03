@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
 import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/modules/add_salah/controller.dart';
+import 'package:yoldasim_app/widgets/utils/drag_hendle.dart';
 
 class SalahTimePickerSheet extends StatelessWidget {
   SalahTimePickerSheet({super.key});
@@ -24,7 +25,7 @@ class SalahTimePickerSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildDragHandle(),
+              const DragHandle(),
               const SizedBox(height: 16),
               Text(C.activity.selectTimeTitle, style: context.text.titleLarge),
               const SizedBox(height: 16),
@@ -32,17 +33,6 @@ class SalahTimePickerSheet extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildDragHandle() {
-    return Container(
-      width: 40,
-      height: 4,
-      decoration: BoxDecoration(
-        color: Colors.grey.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(10),
       ),
     );
   }

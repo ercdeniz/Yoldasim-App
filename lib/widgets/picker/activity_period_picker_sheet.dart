@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:yoldasim_app/core/constants/app_constants.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
 import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
+import 'package:yoldasim_app/widgets/picker/dual_list/components/dual_list_draggable_splitter.dart';
+import 'package:yoldasim_app/widgets/utils/drag_hendle.dart';
 
 typedef C = AppConstants;
 
@@ -42,7 +44,7 @@ class ActivityPeriodPickerSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _DragHandle(),
+              const DragHandle(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Text(
@@ -73,20 +75,6 @@ class ActivityPeriodPickerSheet extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _DragHandle extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 40,
-      height: 4,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade400,
-        borderRadius: BorderRadius.circular(10),
       ),
     );
   }

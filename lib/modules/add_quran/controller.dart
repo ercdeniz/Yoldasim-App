@@ -53,7 +53,7 @@ class AddQuranController extends GetxController {
         ? weeklyDays
         : monthlyDays;
     return selectedDays.isEmpty
-        ? C.activity.allDays
+        ? C.activity.noDaysSelected
         : C.activity.selectedDaysCount(selectedDays.length);
   }
 

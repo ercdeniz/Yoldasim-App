@@ -24,7 +24,7 @@ class AddDhikrController extends GetxController {
         ? weeklyDays
         : monthlyDays;
     return selectedDays.isEmpty
-        ? C.activity.selectDays
+        ? C.activity.noDaysSelected
         : C.activity.selectedDaysCount(selectedDays.length);
   }
 

@@ -47,6 +47,7 @@ class _CommonStrings {
   final String today = 'Bugün';
   final String yes = 'Evet';
   final String no = 'Hayır';
+  final int animationDuration = 250; // ms
 }
 
 class _HomeStrings {
@@ -67,6 +68,7 @@ class _ActivityStrings {
   final String detailPeriod = 'Periyot';
   final String detailStartDate = 'Başlangıç tarihi';
   final String detailRequirement = 'Zorunluluk';
+  final String quranJuzList = 'Cüz listesi';
   final String detailSelectedJuz = 'Seçilen cüzler';
   final String detailSelectedSurah = 'Seçilen sure';
   final String detailPrayerTime = 'Namaz vakti';
@@ -101,13 +103,14 @@ class _ActivityStrings {
   final String periodMonthly = 'Aylık';
   final String periodYearly = 'Yıllık';
   final String periodAllTime = 'Tüm Zamanlar';
-  final String scheduledDays = 'Uygulanacak Günler';
-  final String allDays = 'Tüm günleri seç';
   final String clearDays = 'Seçimleri temizle';
   final String apply = 'Uygula';
   final String selectTargetType = 'Hedef birimi seçin';
   final String selectPeriod = 'Periyot seçin';
-  final String selectDays = 'Günleri seçin';
+  final String selectDays = 'Gün(leri) Seçin';
+  final String noDaysSelected = 'Henüz gün seçilmedi.';
+  final String selectedDays = 'Seçilen günler';
+  final String days = 'Günler';
 
   final List<String> quranSurahNames = const [
     'Fatiha',

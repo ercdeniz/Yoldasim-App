@@ -8,7 +8,7 @@ import 'package:yoldasim_app/modules/add_dhikr/controller.dart';
 import 'package:yoldasim_app/widgets/inputs/number_input_field.dart';
 import 'package:yoldasim_app/widgets/picker/activity_period_picker_sheet.dart';
 import 'package:yoldasim_app/widgets/picker/activity_schedule_picker_sheet.dart';
-import 'package:yoldasim_app/widgets/picker/date_picker_dialog.dart';
+import 'package:yoldasim_app/widgets/dialogs/date_picker_dialog.dart';
 import 'package:yoldasim_app/widgets/picker/target_condition_picker_button.dart';
 import 'package:yoldasim_app/widgets/carts/field_requirement_badge.dart';
 import 'package:yoldasim_app/widgets/tiles/icon_list_item.dart';
@@ -76,7 +76,7 @@ class DhikrFormSection extends GetView<AddDhikrController> {
                   controller.selectedPeriod.value == ActivityPeriod.allTime
                 ? const SizedBox.shrink()
                 : AddPageListItem(
-                    title: C.activity.scheduledDays,
+                    title: C.activity.selectDays,
                     subtitle: Text(controller.scheduleSummary),
                     icon: Icons.event_available,
                     requirement: FieldRequirement.mandatory,

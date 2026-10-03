@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:yoldasim_app/core/constants/app_constants.dart';
 import 'package:yoldasim_app/core/constants/app_enums.dart';
 import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
+import 'package:yoldasim_app/widgets/utils/drag_hendle.dart';
 
 typedef C = AppConstants;
 
@@ -42,14 +43,7 @@ class QuranTargetTypePickerSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade400,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+              const DragHandle(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Text(
@@ -78,5 +72,4 @@ class QuranTargetTypePickerSheet extends StatelessWidget {
       ),
     );
   }
-
 }

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/data/models/activity_model.dart';
 import 'package:yoldasim_app/modules/home/widgets/activity_listing/activity_delete_dialog.dart';
+import 'package:yoldasim_app/widgets/utils/drag_hendle.dart';
 
 class ActivityDetailsBottomSheet extends StatelessWidget {
   final ActivityModel activity;
@@ -43,67 +44,16 @@ class ActivityDetailsBottomSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade400,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+              const DragHandle(),
               const SizedBox(height: 16),
-
               // HEADER BÖLÜMÜ
-              Row(
-                children: [
-                  // Sol İkon
-                  Container(
-                    width: 46,
-                    height: 46,
-                    decoration: BoxDecoration(
-                      color: color.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Center(
-                      child: SvgPicture.asset(
-                        iconPath,
-                        width: 32,
-                        height: 32,
-                        colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-
-                  // Orta Başlık
-                  Expanded(
-                    child: Text(
-                      activity.title,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-
-                  // Sağ Kapatma Butonu
-                  IconButton(
-                    onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-                    icon: const Icon(Icons.close, color: Colors.grey),
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.grey.withValues(alpha: 0.1),
-                    ),
-                  ),
-                ],
-              ),
-
+              _header(context),
               Divider(
                 height: 32,
                 color: Colors.grey.withValues(alpha: 0.1),
                 indent: 5,
                 endIndent: 10,
               ),
-
               // SEÇENEKLER BÖLÜMÜ
               _buildMenuItem(
                 icon: Icons.bar_chart_rounded,
@@ -135,6 +85,48 @@ class ActivityDetailsBottomSheet extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Row _header(BuildContext context) {
+    return Row(
+      children: [
+        // Sol İkon
+        Container(
+          width: 46,
+          height: 46,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Center(
+            child: SvgPicture.asset(
+              iconPath,
+              width: 32,
+              height: 32,
+              colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+            ),
+          ),
+        ),
+        const SizedBox(width: 14),
+
+        // Orta Başlık
+        Expanded(
+          child: Text(
+            activity.title,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+
+        // Sağ Kapatma Butonu
+        IconButton(
+          onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+          icon: const Icon(Icons.close, color: Colors.grey),
+          style: IconButton.styleFrom(
+            backgroundColor: Colors.grey.withValues(alpha: 0.1),
+          ),
+        ),
+      ],
     );
   }
 

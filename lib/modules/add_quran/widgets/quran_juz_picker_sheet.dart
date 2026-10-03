@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yoldasim_app/core/constants/app_constants.dart';
 import 'package:yoldasim_app/widgets/picker/dual_list/dual_list_split_selector.dart';
 
 class QuranJuzPickerSheet {
@@ -13,9 +12,9 @@ class QuranJuzPickerSheet {
         allItems: List.generate(30, (i) => i + 1),
         initialSelectedItems: initialJuzNumbers,
         onItemsSelected: onJuzSelected,
-        headerTitle: AppConstants.activity.quranJuz,
-        leftPanelTitle: "Cüz Listesi",
-        rightPanelTitle: "Seçilenler",
+        headerTitle: C.activity.selectQuranJuz,
+        leftPanelTitle: C.activity.quranJuzList,
+        rightPanelTitle: C.activity.detailSelectedJuz,
         headerIcon: Icons.format_list_numbered,
       ),
       isScrollControlled: true,

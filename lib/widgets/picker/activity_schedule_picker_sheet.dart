@@ -21,9 +21,9 @@ class ActivitySchedulePickerSheet {
             : List.generate(31, (i) => i + 1),
         initialSelectedItems: isWeekly ? initialWeeklyDays : initialMonthlyDays,
         onItemsSelected: isWeekly ? onWeeklyDaysSelected : onMonthlyDaysSelected,
-        headerTitle: AppConstants.activity.scheduledDays,
-        leftPanelTitle: isWeekly ? "Günler" : "Ayın Günleri",
-        rightPanelTitle: "Seçilenler",
+        headerTitle: C.activity.selectDays,
+        leftPanelTitle: C.activity.days,
+        rightPanelTitle: C.activity.selectedDays,
         headerIcon: isWeekly ? Icons.view_week_outlined : Icons.calendar_month_outlined,
         itemLabelBuilder: isWeekly
             ? (item) => AppConstants.daysOfWeek[item - 1]

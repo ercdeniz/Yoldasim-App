@@ -7,7 +7,7 @@ import 'package:yoldasim_app/core/extensions/date_extensions.dart';
 import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/modules/add_fasting/controller.dart';
 import 'package:yoldasim_app/widgets/inputs/number_input_field.dart';
-import 'package:yoldasim_app/widgets/picker/date_picker_dialog.dart';
+import 'package:yoldasim_app/widgets/dialogs/date_picker_dialog.dart';
 import 'package:yoldasim_app/widgets/tiles/icon_list_item.dart';
 
 typedef C = AppConstants;
