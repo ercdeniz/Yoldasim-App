@@ -40,12 +40,9 @@ class HomeBottomAppBar extends StatelessWidget {
         leftCornerRadius: cornerRadius,
         rightCornerRadius: cornerRadius,
         backgroundColor: context.cardColor,
-
         scaleFactor: 0.5,
-
         splashColor: Colors.transparent,
         splashRadius: 0,
-
         onTap: (index) => mainController.changePage(index),
         tabBuilder: (int index, bool isActive) {
           final color = isActive
@@ -56,8 +53,7 @@ class HomeBottomAppBar extends StatelessWidget {
           return AnimatedScale(
             scale: isActive ? 1.20 : 1.0,
             duration: Duration(milliseconds: C.common.animationDuration),
-            curve: Curves.easeInOut,
-
+            curve: Curves.easeInOut, 
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,

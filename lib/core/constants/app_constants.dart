@@ -31,6 +31,7 @@ class AppConstants {
   static const common = _CommonStrings();
   static const activity = _ActivityStrings();
   static const home = _HomeStrings();
+  static const errors = _ErrorStrings();
 }
 
 class _CommonStrings {
@@ -272,4 +273,19 @@ class _ActivityStrings {
 
   String targetDisplay(String conditionName, int target) =>
       'Hedef: $conditionName $target';
+}
+
+class _ErrorStrings {
+  const _ErrorStrings();
+  final String splashLoadErrorGeneral = "Beklenmeyen bir sistem hatası oluştu.";
+  final String splashLoadErrorTitle = 'Uygulama Başlatılamadı';
+  final String splashLoadErrorDesc =
+      'Sistem verileri yüklenirken bir sorun oluştu.\nLütfen tekrar deneyin.';
+  final String splashLoadErrorRetry = 'Tekrar Dene';
+  final String splashLoadErrorDatabase =
+      "Veritabanı başlatılamadı. Lütfen cihazınızda yeterli boş alan olduğundan emin olun.";
+  final String splashLoadErrorNetwork =
+      "Bağlantı zaman aşımına uğradı. İnternetinizi kontrol edin.";
+  final String splashLoadErrorPermission =
+      "Uygulamanın çalışması için gerekli izinler alınamadı.";
 }

@@ -64,4 +64,4 @@ migrate_working_dir/
 app.*.symbols
 app.*.map.json
 .widget_preview/
-yapılacaklar_listesi.txt
+yapılacaklar_listesi.dart

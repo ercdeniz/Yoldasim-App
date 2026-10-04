@@ -105,8 +105,8 @@ class _QuranSurahPickerSheetState extends State<QuranSurahPickerSheet> {
 
   TextField _search(BuildContext context) {
     return TextField(
+      onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
       controller: searchController,
-      autofocus: true,
       onChanged: (value) => setState(() => query = value),
       decoration: InputDecoration(
         hintText: C.activity.searchQuranSurah,

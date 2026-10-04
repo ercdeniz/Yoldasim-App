@@ -17,7 +17,7 @@ class CalendarController extends GetxController {
   ListingController get listingController => Get.find<ListingController>();
 
   /// Tarih şeridinin pozisyonunu yönetecek kontrolcü
-  final itemScrollController = ScrollController();
+  late ScrollController itemScrollController;
 
   /// Seçili tarih
   /// Takvim şeridinde veya alttan açılan takvimde seçili olan tarih
@@ -36,7 +36,17 @@ class CalendarController extends GetxController {
   void onInit() {
     super.onInit();
     generateDateList(selectedDate.value);
-    scrollToCenter();
+
+    /// Şeridi ortalayacak şekilde scroll controller'ı başlat
+    final screenWidth = Get.width;
+    const totalItemWidth = dateItemWidth + dateItemMargin;
+    final itemStartPosition = (30 * totalItemWidth) + dateStripLeftPadding;
+    final targetPosition =
+        itemStartPosition - (screenWidth / 2) + (dateItemWidth / 2);
+    itemScrollController = ScrollController(
+      initialScrollOffset: targetPosition > 0 ? targetPosition : 0.0,
+    );
+    getDailyRecordsForDate();
   }
 
   /// Verilen referans tarihe göre 30 gün önce ve 30 gün sonrasını hesaplar

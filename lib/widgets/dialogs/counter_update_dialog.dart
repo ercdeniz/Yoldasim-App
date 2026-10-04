@@ -182,6 +182,7 @@ class _CounterBoxState extends State<_CounterBox> {
           }),
           Expanded(
             child: TextFormField(
+              onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
               controller: textController,
               focusNode: focusNode,
               textAlign: TextAlign.center,

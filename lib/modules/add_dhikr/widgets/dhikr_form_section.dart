@@ -165,6 +165,7 @@ class _TextField extends StatelessWidget {
 
   TextFormField _buildField(BuildContext context) {
     return TextFormField(
+      onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
       minLines: 1,
       maxLines: 3,
       keyboardType: TextInputType.multiline,

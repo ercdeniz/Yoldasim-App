@@ -8,4 +8,5 @@ abstract class AppRoutes {
   static const FASTING = '/add-fasting';
   static const DHIKR = '/add-dhikr';
   static const QURAN = '/add-quran';
+  static const ALL_ACTIVITIES = '/all-activities';
 }

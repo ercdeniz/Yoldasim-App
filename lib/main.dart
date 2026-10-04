@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yoldasim_app/core/constants/app_constants.dart';
+
 import 'core/theme/app_theme.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
@@ -23,9 +24,10 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-
-    initialRoute: AppRoutes.SPLASH,
+      initialRoute: AppRoutes.SPLASH,
       getPages: AppPages.pages,
+      defaultTransition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
     );
   }
 }

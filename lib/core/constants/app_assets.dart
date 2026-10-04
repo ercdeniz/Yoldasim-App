@@ -4,4 +4,5 @@ abstract class AppAssets {
   static const String iconFasting = 'assets/icons/fasting.svg';
   static const String iconQuran = 'assets/icons/quran.svg';
   static const String iconDhikr = 'assets/icons/dhikr.svg';
+  static const String lottieBismillah = 'assets/lottie/Bismillah.json';
 }

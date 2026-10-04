@@ -18,8 +18,10 @@ class HorizontalDateStrip extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
         height: CalendarController.dateStripHeight,
-        child: Obx(
-          () => ListView.builder(
+        child: Obx(() {
+          final currentSelectedDate = calendarController.selectedDate.value;
+
+          return ListView.builder(
             scrollDirection: Axis.horizontal,
             controller: calendarController.itemScrollController,
             padding: const EdgeInsets.symmetric(
@@ -28,7 +30,7 @@ class HorizontalDateStrip extends StatelessWidget {
             itemCount: calendarController.dateList.length,
             itemBuilder: (context, index) {
               final date = calendarController.dateList[index];
-              final isSelected = calendarController.selectedDate.value.onlyDate == date.onlyDate;
+              final isSelected = currentSelectedDate.onlyDate == date.onlyDate;
 
               return GestureDetector(
                 onTap: () {
@@ -39,9 +41,7 @@ class HorizontalDateStrip extends StatelessWidget {
                   width: CalendarController.dateItemWidth,
                   margin: const EdgeInsets.only(right: 8),
                   decoration: BoxDecoration(
-                    color: isSelected
-                        ? context.primary
-                        : context.cardColor,
+                    color: isSelected ? context.primary : context.cardColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
@@ -75,8 +75,8 @@ class HorizontalDateStrip extends StatelessWidget {
                 ),
               );
             },
-          ),
-        ),
+          );
+        }),
       ),
     );
   }

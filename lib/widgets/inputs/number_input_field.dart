@@ -5,8 +5,6 @@ import 'package:yoldasim_app/core/constants/app_enums.dart';
 import 'package:yoldasim_app/core/extensions/theme_extentions.dart';
 import 'package:yoldasim_app/widgets/carts/field_requirement_badge.dart';
 
-
-// TODO boşluğa tıklayınca klavyenin kapanması için bişi yap
 class NumberInputField extends StatelessWidget {
   final String label;
   final String hint;
@@ -50,8 +48,7 @@ class NumberInputField extends StatelessWidget {
                       label,
                       style: TextStyle(
                         fontSize: context.text.bodyMedium?.fontSize,
-                        fontWeight:
-                            context.text.bodyMedium?.fontWeight,
+                        fontWeight: context.text.bodyMedium?.fontWeight,
                       ),
                     ),
                   ),
@@ -79,6 +76,7 @@ class NumberInputField extends StatelessWidget {
                         FilteringTextInputFormatter.deny(RegExp(r'^0+')),
                       ],
                       onChanged: onChanged,
+                      onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
                       decoration: InputDecoration(
                         hintText: hint,
                         hintStyle: const TextStyle(
@@ -119,8 +117,9 @@ class NumberInputField extends StatelessWidget {
                           vertical: 12,
                         ),
                         filled: true,
-                        fillColor: context.scaffoldBackgroundColor
-                            .withValues(alpha: 0.5),
+                        fillColor: context.scaffoldBackgroundColor.withValues(
+                          alpha: 0.5,
+                        ),
                       ),
                     ),
                   ),
